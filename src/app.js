@@ -1,2 +1,2 @@
 require('./css/main.css');
-require('./js/main.js');
+require('./js/main.es6.js');

@@ -7,8 +7,11 @@
     "start": "webpack"
   },
   "dependencies": {
-    "webpack": "^1.0.0",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
     "vue": "^2.1.10",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "webpack": "^1.0.0"
   }
 }
