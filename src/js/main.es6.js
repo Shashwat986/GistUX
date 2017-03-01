@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import router from './router.es6.js'
 
 var store = {
   state: {
@@ -15,6 +16,7 @@ var store = {
 window.vm = {
   navbar: new Vue({
     el: '#navbar',
+    router: router,
     data: {
       githubKey: null,
       store: store,
@@ -24,6 +26,7 @@ window.vm = {
 
   content: new Vue({
     el: "#main",
+    router: router,
     data: {
       store: store,
       state: store.state
