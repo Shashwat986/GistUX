@@ -4,7 +4,8 @@
   "description": "GistUX",
   "author": "Shashwat Chandra",
   "scripts": {
-    "start": "webpack"
+    "dev": "webpack --progress --watch",
+    "start": "cd dist && python -m http.server"
   },
   "dependencies": {
     "babel-core": "^6.23.1",
