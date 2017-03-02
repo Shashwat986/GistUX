@@ -11,11 +11,21 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js'
     }
   },
+  vue: {
+    loaders: {
+      js: 'babel?presets[]=es2015'
+    }
+  },
   module: {
     loaders: [
       {
-        test: /\.es6\.js$/,
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.js$/,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         query: {
           presets: ['es2015']
         }
@@ -23,10 +33,6 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader'
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
       }
     ]
   }

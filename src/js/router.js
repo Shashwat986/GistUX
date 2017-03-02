@@ -7,8 +7,14 @@ Vue.use(VueRouter)
 const Bar = { template: '<div>bar</div>' }
 
 const routes = [
-  { path: '/list', component: List },
-  { path: '/bar', component: Bar }
+  {
+    path: '/list',
+    component: List
+  },
+  {
+    path: '/bar',
+    component: Bar
+  }
 ]
 
 const router = new VueRouter({ routes });

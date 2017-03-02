@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import router from './router.es6.js'
+import router from './router.js'
 
 var store = {
   state: {
