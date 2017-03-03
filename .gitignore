@@ -13,3 +13,5 @@ tags
 ._.DS_Store
 
 node_modules
+
+bundle.js
