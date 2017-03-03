@@ -5,3 +5,7 @@
 .m10-top {
   margin-top: 10px;
 }
+
+.pointer {
+  cursor: pointer;
+}

@@ -15,48 +15,17 @@
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">GistUX</a>
-        </div>
-        <section id="navbar">
-        <div class="navbar-right" v-if="state.githubKey">
-          <ul class="navbar-nav nav">
-            <li><a>Github Token: {{state.githubKey}}</a></li>
-            <li>
-              <button type="submit" class="btn navbar-btn btn-danger" v-on:click="store.destroySession">End Session</button>
-            </li>
-          </ul>
-        </div>
-        <template v-else>
-          <div class="navbar-right">
-            <div class="navbar-form">
-              <div class="input-group">
-                <span class="input-group-addon">Enter Token</span>
-                <input type="text" v-model="githubKey" v-on:keyup.enter="store.setGithubKey(githubKey)" class="form-control">
-              </div>
-            </div>
-          </div>
-          <div class="navbar-right">
-            <ul class="navbar-nav nav">
-              <li><a target="_blank" href="#">Get Github Authentication Token</a></li>
-            </ul>
-          </div>
-        </template>
-        </section>
-      </div>
-    </nav>
     <section id="main">
-    <div class="container-fluid bg-danger" v-if="state.error">
-      <p class="text-center m10-top">{{state.error}}</p>
+    <navbar></navbar>
+    <div class="container-fluid bg-danger" v-if="state.banner.error">
+      <p class="text-center m10-top">{{state.banner.error}}</p>
     </div>
-    <div class="container-fluid bg-success" v-if="state.success">
-      <p class="text-center m10-top">{{state.success}}</p>
+    <div class="container-fluid bg-success" v-if="state.banner.success">
+      <p class="text-center m10-top">{{state.banner.success}}</p>
     </div>
     <div class="container-fluid bg-dark">
       <div class="container">
-        <template v-if="state.githubKey">
+        <template v-if="state.github.githubKey">
           <h1>Welcome Back!</h1>
         </template>
         <template v-else>
@@ -71,8 +40,8 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <spinner v-if="state.showSpinner" v-bind:message="state.spinnerMessage"></spinner>
-        <router-view v-else v-bind:github-key="state.githubKey"></router-view>
+        <spinner v-if="state.spinner.showSpinner" v-bind:message="state.spinner.spinnerMessage"></spinner>
+        <router-view v-else v-bind:github-key="state.github.githubKey"></router-view>
       </div>
     </div> <!-- /container -->
     </section>
