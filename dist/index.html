@@ -48,6 +48,12 @@
       </div>
     </nav>
     <section id="main">
+    <div class="container-fluid bg-danger" v-if="state.error">
+      <p class="text-center m10-top">{{state.error}}</p>
+    </div>
+    <div class="container-fluid bg-success" v-if="state.success">
+      <p class="text-center m10-top">{{state.success}}</p>
+    </div>
     <div class="container-fluid bg-dark">
       <div class="container">
         <template v-if="state.githubKey">
@@ -65,7 +71,8 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <router-view v-bind:github-key="state.githubKey"></router-view>
+        <spinner v-if="state.showSpinner" v-bind:message="state.spinnerMessage"></spinner>
+        <router-view v-else v-bind:github-key="state.githubKey"></router-view>
       </div>
     </div> <!-- /container -->
     </section>

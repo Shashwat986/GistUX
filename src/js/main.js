@@ -1,17 +1,9 @@
 import Vue from 'vue';
 import router from './router.js'
+import Spinner from './views/spinner.vue'
+import store from './store.js'
 
-var store = {
-  state: {
-    githubKey: null
-  },
-  setGithubKey (key) {
-    store.state.githubKey = key;
-  },
-  destroySession () {
-    store.state.githubKey = null;
-  }
-}
+window.store = store;
 
 window.vm = {
   navbar: new Vue({
@@ -19,8 +11,8 @@ window.vm = {
     router: router,
     data: {
       githubKey: null,
-      store: store,
-      state: store.state
+      store: window.store,
+      state: window.store.state
     }
   }),
 
@@ -28,8 +20,11 @@ window.vm = {
     el: "#main",
     router: router,
     data: {
-      store: store,
-      state: store.state
+      store: window.store,
+      state: window.store.state
+    },
+    components: {
+      spinner: Spinner
     }
   })
 }
