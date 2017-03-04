@@ -1,12 +1,11 @@
-import Vuex from 'vuex'
 import GitHub from 'github-api';
 
 export default {
   state: {
     githubKey: null,
     gh: new GitHub(),
-    gistUXData: null,
-    ghUser: null
+    ghUser: null,
+    ghUserData: null
   },
   mutations: {
     setGithubKey (state, key) {
@@ -18,12 +17,13 @@ export default {
       state.githubKey = null;
       state.gh = null;
       state.ghUser = null;
+      state.ghUserData = null;
     },
     setUser (state, user) {
-      state.ghUser = user;;
+      state.ghUser = user;
     },
-    setGistUXData (state, data) {
-      state.gistUXData = data;
+    setUserData (state, userData) {
+      state.ghUserData = userData;
     }
   },
   actions: {
@@ -33,28 +33,39 @@ export default {
     },
     setGithubKey (context, key) {
       context.commit('setGithubKey', key);
-      context.dispatch('loadGistUXData');
+      context.dispatch('loadGistData');
     },
-    loadGistUXData (context) {
+    loadGistData (context) {
       context.commit('showSpinner', 'Fetching Data');
 
       if (!context.state.ghUser) {
         if (!context.state.gh)
           return;
-        context.dispatch('getUser');
+        context.dispatch('setUser');
       }
 
       // This is a hack to get all gists
       let url = context.state.ghUser.__getScopedUrl('gists');
-      context.state.ghUser._requestAllPages(url).then(function (resp) {
+      let pagesPromise = context.state.ghUser._requestAllPages(url);
+
+      let userDataPromise = context.state.ghUser.getProfile();
+
+      Promise.all([userDataPromise, pagesPromise]).then(function (values) {
         context.dispatch('setSuccess', "Logged in Successfully");
-        context.commit('setGistUXData', resp.data);
+        context.commit('setUserData', values[0].data);
+        context.dispatch('setGistData', values[1].data);
         context.commit('hideSpinner');
       }).catch(function (e) {
+        console.log(e);
         context.dispatch('setError', "Invalid Authentication Key");
         context.commit('destroySession');
         context.commit('hideSpinner');
       });
+    },
+    fetchGistContent (context, gistID = undefined) {
+      g = context.state.gh.getGist(gistID);
+
+      // INCOMPLETE
     }
   }
 }
