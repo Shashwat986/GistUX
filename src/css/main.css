@@ -6,6 +6,10 @@
   margin-top: 10px;
 }
 
+.m10-bottom {
+  margin-bottom: 10px;
+}
+
 .pointer {
   cursor: pointer;
 }

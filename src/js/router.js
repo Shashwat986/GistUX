@@ -8,7 +8,7 @@ const Bar = { template: '<div>bar</div>' }
 
 const routes = [
   {
-    path: '/list',
+    path: '/list/:path*',
     component: List
   },
   {

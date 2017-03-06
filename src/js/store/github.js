@@ -3,12 +3,15 @@ import GitHub from 'github-api';
 export default {
   state: {
     githubKey: null,
-    gh: new GitHub(),
+    gh: null,
     ghUser: null,
     ghUserData: null
   },
   mutations: {
     setGithubKey (state, key) {
+      if (!key) return;
+      if (typeof key == 'String' && key.length == 0) return;
+
       state.githubKey = key;
       state.gh = new GitHub({token: key});
       state.ghUser = state.gh.getUser();
@@ -36,11 +39,11 @@ export default {
       context.dispatch('loadGistData');
     },
     loadGistData (context) {
+      if (!context.state.gh) return;
+
       context.commit('showSpinner', 'Fetching Data');
 
       if (!context.state.ghUser) {
-        if (!context.state.gh)
-          return;
         context.dispatch('setUser');
       }
 
@@ -63,9 +66,19 @@ export default {
       });
     },
     fetchGistContent (context, gistID = undefined) {
-      g = context.state.gh.getGist(gistID);
+      let gistObj = context.state.gh.getGist(gistID);
 
-      // INCOMPLETE
+      // Returns Promise
+      // TODO: Currently this doesn't deal with `truncated` flag.
+      return gistObj.read();
+    },
+    writeGistContent (context, { gistID, content }) {
+      let gistObj = context.state.gh.getGist(gistID);
+      if (gistID) {
+        gistObj.update(content);
+      } else {
+        gistObj.create(content);
+      }
     }
   }
 }

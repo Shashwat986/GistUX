@@ -3,12 +3,14 @@ function NotLoggedInException () {
   this.name = 'NotLoggedInException';
 }
 
+const commentMessage = "";
+const gistUXDescription = "";
 
 export default {
   state: {
     gistData: null,
     folderJSON: null,
-    folderData: null,
+    folderJSONObjectID: null,
     gistUXFileName: null
   },
   getters: {
@@ -17,6 +19,11 @@ export default {
       let userData = rootState.github.ghUserData;
 
       return `GistUX_${userData.login}.json`;
+    },
+    currentlyExistingFileIDs (state) {
+      return state.gistData.map(function (val) {
+        return val.id;
+      });
     }
   },
   mutations: {
@@ -24,42 +31,77 @@ export default {
       state.gistData = data;
     },
     setFolderJSON (state, data = null) {
+      if (data) {
+        if (!data._comment) {
+          data._comment = commentMessage;
+        }
+      }
       state.folderJSON = data;
     },
-    setFolderData (state, data = null) {
-      state.folderData = data;
-    },
-    updateFolderData (state) {
-      if (!state.folderJSON) {
-        state.folderData = {
-          root: {
-            // Deep Copy because mutating this shouldn't affect originally fetched data
-            files: state.gistData.slice(0)
-          }
-        };
-      } else {
-        let gistDataIDs = context.state.gistData.map(function (val) {
-          return val.id;
-        });
-
-        // INCOMPLETE
-      }
+    setFolderJSONObjectID (state, id = null) {
+      state.folderJSONObjectID = id;
     }
   },
   actions: {
     setGistData (context, data) {
       context.commit('setGistData', data);
-      context.dispatch('checkFolderJSON');
-      context.commit('updateFolderData');
-    },
-    checkFolderJSON (context) {
-      if (!context.state.gistData) throw new NotLoggedInException();
+
       if (!context.state.folderJSON) {
-        let folderJSON = context.state.gistData.find(function (val) {
-          return Object.keys(val.files)[0] == context.getters.gistUXFileName;
+        const fileName = context.getters.gistUXFileName;
+        const folderJSONObject = context.state.gistData.find(function (val) {
+          return Object.keys(val.files)[0] == fileName;
         });
 
-        context.commit('setFolderData', folderJSON);
+        if (folderJSONObject) {
+          context.commit('setFolderJSONObjectID', folderJSONObject.id);
+          context.dispatch('fetchGistContent', folderJSONObject.id).then(function (resp) {
+            const fileContent = resp.data.files[fileName].content;
+            context.dispatch('updateFolderJSON', JSON.parse(fileContent));
+          });
+        } else {
+          context.dispatch('updateFolderJSON');
+        }
+      }
+    },
+    updateFolderJSON (context, jsonData = undefined) {
+      let changed = false;
+      if (!context.state.folderJSON) {
+        if (jsonData) {
+          context.commit('setFolderJSON', jsonData);
+        } else {
+          context.commit('setFolderJSON', {
+            root: {
+              // Deep Copy because mutating this shouldn't affect originally fetched data
+              files: context.getters.currentlyExistingFileIDs.slice(0)
+            }
+          });
+          changed = true;
+        }
+      } else {
+        if (jsonData) {
+          context.commit('setFolderJSON', jsonData);
+          changed = true;
+        } else {
+          // INCOMPLETE?
+        }
+      }
+
+      if (changed) {
+        context.dispatch(
+          'writeGistContent',
+          {
+            gistID: context.state.folderJSONObjectID,
+            content: {
+              description: gistUXDescription,
+              public: false,
+              files: {
+                [context.getters.gistUXFileName]: {
+                  content: JSON.stringify(context.state.folderJSON, null, 2)
+                }
+              }
+            }
+          }
+        );
       }
     }
   }
