@@ -8,7 +8,7 @@
       <ul class="navbar-nav nav">
         <li><a>Github Token: {{state.github.githubKey}}</a></li>
         <li>
-          <button type="submit" class="btn navbar-btn btn-danger" v-on:click="$store.commit('destroySession')">End Session</button>
+          <button type="submit" class="btn navbar-btn btn-danger" v-on:click="endSession">End Session</button>
         </li>
       </ul>
     </div>
@@ -44,6 +44,11 @@ module.exports = {
   methods: {
     setGithubKey: function () {
       this.$store.dispatch('setGithubKey', this.githubKey);
+    },
+    endSession: function () {
+      this.$store.commit('destroySession');
+      this.$router.push('/');
+      this.$store.dispatch('setSuccess', 'Logged out Successfully!');
     }
   }
 }

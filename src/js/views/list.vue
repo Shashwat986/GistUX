@@ -55,7 +55,8 @@ module.exports = {
     }
   },
   created: function () {
-    if (!this.state.gistux.folderJSON) {
+    if (!this.state.github.githubKey ||
+        !this.state.gistux.folderJSON) {
       this.$parent.$router.push('/');
       return;
     }
