@@ -24,23 +24,13 @@
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
-    <div class="col-md-4 col-xs-6" v-for="key in currentPath.files">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">{{key}}</h3>
-        </div>
-      </div>
-    </div>
+    <file-item v-for="item in currentPath.files" :key="item" :fileId="item"></file-item>
   </div>
 </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import Spinner from './spinner.vue'
-
-Vue.use(VueResource)
+import FileItem from './file_item.vue'
 
 module.exports = {
   data: function () {
@@ -64,7 +54,7 @@ module.exports = {
   },
   methods: {
     getFolderUrl: function (key) {
-      return this.$route.path + "/" + key;
+      return (this.$route.params.path || "/list") + "/" + key;
     },
     updateDisplayData: function () {
       this.route = [];
@@ -93,6 +83,9 @@ module.exports = {
   },
   watch: {
     $route: 'updateDisplayData'
+  },
+  components: {
+    "file-item": FileItem
   }
 }
 </script>

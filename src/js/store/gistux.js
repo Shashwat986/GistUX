@@ -24,6 +24,13 @@ export default {
       return state.gistData.map(function (val) {
         return val.id;
       });
+    },
+    idObjectMapping (state) {
+      return new Map(
+        state.gistData.map(function(val) {
+          return [val.id, val];
+        })
+      );
     }
   },
   mutations: {
