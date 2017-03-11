@@ -61,12 +61,14 @@ export default {
 
         if (folderJSONObject) {
           context.commit('setFolderJSONObjectID', folderJSONObject.id);
-          context.dispatch('fetchGistContent', folderJSONObject.id).then(function (resp) {
+
+          context.commit('showSpinner', 'Fetching current folder structure');
+          return context.dispatch('fetchGistContent', folderJSONObject.id).then(function (resp) {
             const fileContent = resp.data.files[fileName].content;
             context.dispatch('updateFolderJSON', JSON.parse(fileContent));
           });
         } else {
-          context.dispatch('updateFolderJSON');
+          return context.dispatch('updateFolderJSON');
         }
       }
     },

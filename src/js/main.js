@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import {mapState} from 'vuex';
 import router from './router.js';
 import Spinner from './views/spinner.vue';
 import Navbar from './views/navbar.vue';

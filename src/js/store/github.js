@@ -36,12 +36,12 @@ export default {
     },
     setGithubKey (context, key) {
       context.commit('setGithubKey', key);
-      context.dispatch('loadGistData');
+      return context.dispatch('loadGistData');
     },
     loadGistData (context) {
       if (!context.state.gh) return;
 
-      context.commit('showSpinner', 'Fetching Data');
+      context.commit('showSpinner', 'Fetching User Data');
 
       if (!context.state.ghUser) {
         context.dispatch('setUser');
@@ -53,15 +53,17 @@ export default {
 
       let userDataPromise = context.state.ghUser.getProfile();
 
-      Promise.all([userDataPromise, pagesPromise]).then(function (values) {
-        context.dispatch('setSuccess', "Logged in Successfully");
+      return Promise.all([userDataPromise, pagesPromise]).then(function (values) {
+        context.commit('showSpinner', 'Processing fetched pages');
         context.commit('setUserData', values[0].data);
-        context.dispatch('setGistData', values[1].data);
-        context.commit('hideSpinner');
-      }).catch(function (e) {
+        return context.dispatch('setGistData', values[1].data);
+      }, function (e) {
         console.log(e);
         context.dispatch('setError', "Invalid Authentication Key");
         context.commit('destroySession');
+        context.commit('hideSpinner');
+      }).then(function () {
+        context.dispatch('setSuccess', "Logged in Successfully");
         context.commit('hideSpinner');
       });
     },

@@ -43,7 +43,10 @@ module.exports = {
   },
   methods: {
     setGithubKey: function () {
-      this.$store.dispatch('setGithubKey', this.githubKey);
+      let that = this;
+      this.$store.dispatch('setGithubKey', this.githubKey).then(function () {
+        that.$router.push('/list');
+      });
     },
     endSession: function () {
       this.$store.commit('destroySession');
