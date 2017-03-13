@@ -29,7 +29,11 @@
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
-    <file-item v-for="item in currentPath.files" :key="item" :fileId="item"></file-item>
+    <template v-for="(item, index) in currentPath.files">
+      <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
+      <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
+      <file-item :key="item" :fileId="item"></file-item>
+    </template>
   </div>
 </div>
 </template>
