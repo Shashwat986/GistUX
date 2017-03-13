@@ -24,7 +24,7 @@ export default {
       context.commit('setError', message);
       setTimeout(function () {
         context.commit('setError');
-      }, 3000);
+      }, 5000);
     }
   }
 }

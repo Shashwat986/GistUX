@@ -6,7 +6,8 @@ export default {
     githubKey: null,
     gh: null,
     ghUser: null,
-    ghUserData: null
+    ghUserData: null,
+    ghGistPermission: null
   },
   mutations: {
     setGithubKey (state, key) {
@@ -30,6 +31,9 @@ export default {
     },
     setUserData (state, userData) {
       state.ghUserData = userData;
+    },
+    setGistPermission(state, val) {
+      state.ghGistPermission = !!val;
     }
   },
   actions: {
@@ -80,9 +84,9 @@ export default {
     writeGistContent (context, { gistID, content }) {
       let gistObj = context.state.gh.getGist(gistID);
       if (gistID) {
-        gistObj.update(content);
+        return gistObj.update(content);
       } else {
-        gistObj.create(content);
+        return gistObj.create(content);
       }
     }
   }

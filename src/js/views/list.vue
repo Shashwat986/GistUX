@@ -10,6 +10,11 @@
       <router-link :to="'/list' + item.path">{{item.name}}</router-link>
     </li>
   </ol>
+  <p class="bg-warning text-center" v-if="state.github.ghGistPermission === false">
+    Please note that GistUX does not have write permissions to your gists. This tool may not have access to your private gists, and all changes made here will not be saved.
+    <br/>
+    Fix this by <a href="https://github.com/settings/tokens" target="_blank">regenerating your Github Token</a> and giving it the <i>gist</i> permission.
+  </p>
   <h2><small>Folders</small></h2>
   <div class="row">
     <div class="col-md-4 col-xs-6" v-for="(value, key) in currentPath.folders">
@@ -28,6 +33,12 @@
   </div>
 </div>
 </template>
+
+<style>
+p.bg-warning {
+  padding: 10px;
+}
+</style>
 
 <script>
 import FileItem from './file_item.vue'

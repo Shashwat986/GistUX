@@ -110,7 +110,12 @@ export default {
               }
             }
           }
-        );
+        ).then(function () {
+          context.commit('setGistPermission', true);
+        }, function (err) {
+          context.dispatch('setError', 'Unable to save GistUX file. Have you provided gist access in the generated token?');
+          context.commit('setGistPermission', false);
+        });
       }
     }
   }
