@@ -16,7 +16,7 @@
   </head>
   <body>
     <section id="main">
-    <navbar></navbar>
+    <navbar :set-github-key="setGithubKey"></navbar>
     <div class="container-fluid bg-danger" v-if="state.banner.error">
       <p class="text-center m10-top">{{state.banner.error}}</p>
     </div>

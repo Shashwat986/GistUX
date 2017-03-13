@@ -16,8 +16,8 @@
       <div class="navbar-right">
         <div class="navbar-form">
           <div class="input-group">
-            <span class="input-group-addon pointer" v-on:click="setGithubKey">Enter Token</span>
-            <input type="text" v-model="githubKey" v-on:keyup.enter="setGithubKey" class="form-control">
+            <span class="input-group-addon pointer" v-on:click="setGithubKey(githubKey)">Enter Token</span>
+            <input type="text" v-model="githubKey" v-on:keyup.enter="setGithubKey(githubKey)" class="form-control">
           </div>
         </div>
       </div>
@@ -36,18 +36,13 @@ module.exports = {
   data: function () {
     return { githubKey: null };
   },
+  props: ['setGithubKey'],
   computed: {
     state: function () {
       return this.$store.state;
     }
   },
   methods: {
-    setGithubKey: function () {
-      let that = this;
-      this.$store.dispatch('setGithubKey', this.githubKey).then(function () {
-        that.$router.push('/list');
-      });
-    },
     endSession: function () {
       this.$store.commit('destroySession');
       this.$router.push('/');

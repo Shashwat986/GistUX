@@ -1,4 +1,5 @@
 import GitHub from 'github-api';
+import constants from '../constants.js'
 
 export default {
   state: {
@@ -13,11 +14,13 @@ export default {
       if (typeof key == 'String' && key.length == 0) return;
 
       state.githubKey = key;
+      window.localStorage.setItem(constants.localStorageKey, key);
       state.gh = new GitHub({token: key});
       state.ghUser = state.gh.getUser();
     },
     destroySession (state) {
       state.githubKey = null;
+      window.localStorage.removeItem(constants.localStorageKey);
       state.gh = null;
       state.ghUser = null;
       state.ghUserData = null;
