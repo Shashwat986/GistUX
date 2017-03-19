@@ -37,10 +37,6 @@ export default {
     }
   },
   actions: {
-    setUser (context) {
-      user = context.state.gh.getUser()
-      context.commit('setUser', user);
-    },
     setGithubKey (context, key) {
       context.commit('setGithubKey', key);
       return context.dispatch('loadGistData');
@@ -51,7 +47,7 @@ export default {
       context.commit('showSpinner', 'Fetching User Data');
 
       if (!context.state.ghUser) {
-        context.dispatch('setUser');
+        context.commit('setUser', context.state.gh.getUser());
       }
 
       // This is a hack to get all gists
