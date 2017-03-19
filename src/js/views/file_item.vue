@@ -31,13 +31,16 @@
         </a>
       </div>
       <div class="panel-footer" v-if="showMove">
-        Hello World
+        <move-modal :file-object="fileObject"></move-modal>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import MoveModal from './move_modal.vue'
+
+
 module.exports = {
   props: ['fileId'],
   data: function () {
@@ -67,6 +70,9 @@ module.exports = {
     toggleMove: function () {
       this.showMove = !this.showMove;
     }
+  },
+  components: {
+    "move-modal": MoveModal
   }
 }
 </script>

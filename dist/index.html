@@ -40,8 +40,8 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <spinner v-if="state.spinner.showSpinner" v-bind:message="state.spinner.spinnerMessage"></spinner>
-        <router-view v-else v-bind:github-key="state.github.githubKey"></router-view>
+        <spinner v-show="state.spinner.showSpinner" v-bind:message="state.spinner.spinnerMessage"></spinner>
+        <router-view v-show="!state.spinner.showSpinner" v-bind:github-key="state.github.githubKey"></router-view>
       </div>
     </div> <!-- /container -->
     </section>

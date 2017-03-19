@@ -72,12 +72,18 @@ export default {
         }
       }
     },
-    updateFolderJSON (context, jsonData = undefined) {
-      let changed = false;
+    updateFolderJSON (context, jsonData = undefined, changed = false) {
       if (!context.state.folderJSON) {
         if (jsonData) {
+          // If config file exists and no data in $store
+          // Copy config content to $store
+
+          //TODO: Add new files to root folder
           context.commit('setFolderJSON', jsonData);
         } else {
+          // If config file doesn't exist and no data in $store
+          // Create new $store. Write to config file
+
           context.commit('setFolderJSON', {
             root: {
               // Deep Copy because mutating this shouldn't affect originally fetched data
@@ -88,10 +94,16 @@ export default {
         }
       } else {
         if (jsonData) {
+          // If config file exists and data in $store
+          // Overwrite data
+
           context.commit('setFolderJSON', jsonData);
           changed = true;
         } else {
-          // INCOMPLETE?
+          // If config file doesn't exist and data in $store
+          // Write to config file
+
+          changed = true;
         }
       }
 
