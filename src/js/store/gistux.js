@@ -72,7 +72,8 @@ export default {
         }
       }
     },
-    updateFolderJSON (context, jsonData = undefined, changed = false) {
+    updateFolderJSON (context, jsonData = undefined) {
+      let changed = false;
       if (!context.state.folderJSON) {
         if (jsonData) {
           // If config file exists and no data in $store
@@ -87,7 +88,8 @@ export default {
           context.commit('setFolderJSON', {
             root: {
               // Deep Copy because mutating this shouldn't affect originally fetched data
-              files: context.getters.currentlyExistingFileIDs.slice(0)
+              files: context.getters.currentlyExistingFileIDs.slice(0),
+              folders: {}
             }
           });
           changed = true;

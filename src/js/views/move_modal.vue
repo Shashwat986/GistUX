@@ -4,8 +4,8 @@
       {{folderPath}}
       <span class="badge" @click="moveItem">Move Here</span>
     </a>
-    <a v-for="item in Object.keys(folders.folders)" @click="updatePath(item)" class="list-group-item">
-      {{item}}
+    <a v-for="(value, key) in currentFolder.folders" @click="updatePath(key)" class="list-group-item">
+      {{key}}
     </a>
     <div class="list-group-item">
       <a @click="removePath">Back</a>
@@ -33,10 +33,13 @@ module.exports = {
     };
   },
   computed: {
-    folders: function () {
+    currentFolder: function () {
       let val = this.$store.state.gistux.folderJSON["root"];
       for (let key of this.currentPath) {
-        val = val["folders"][key];
+        if (val.folders && val.folders[key])
+          val = val.folders[key];
+        else
+          break;
       }
       return val;
     },
@@ -65,6 +68,22 @@ module.exports = {
       if (!this.validFolderName) return;
 
       // TODO
+      let root = this.$store.state.gistux.folderJSON;
+      let val = root["root"];
+      for (let key of this.currentPath) {
+        if (val.folders && val.folders[key])
+          val = val.folders[key];
+        else
+          return;
+      }
+
+      if (!val.folders) val.folders = {};
+      val.folders[this.newFolderName] = {
+        folders: {},
+        files: []
+      };
+
+      this.$store.dispatch('updateFolderJSON', root);
     },
     moveItem: function () {
       // TODO
