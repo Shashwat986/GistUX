@@ -10,10 +10,6 @@ const routes = [
   {
     path: '/list/:path*',
     component: List
-  },
-  {
-    path: '/bar',
-    component: Bar
   }
 ]
 

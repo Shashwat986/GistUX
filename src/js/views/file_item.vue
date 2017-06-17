@@ -1,9 +1,21 @@
 <template>
-  <div class="col-xs-6 col-md-4 panel-container">
-    <div :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']">
-      <div class="panel-heading row">
+  <div
+    class="col-xs-6 col-md-4 panel-container"
+    draggable="true"
+    @dragstart="dragStart"
+    @dragover="preventIfFolder"
+    @drop="drop">
+    <div class="panel panel-default" v-if="elemType === 'folder'">
+      <div class="panel-heading">
+        <router-link :to="getFolderUrl(folder.model.name)">
+          <h3 class="panel-title">{{folder.model.name}}</h3>
+        </router-link>
+      </div>
+    </div>
+    <div :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']" v-else>
+      <div class="panel-heading">
         <a :href="fileObject.html_url" target="_blank" :title="fileName">
-          <h3 class="panel-title col-xs-9">{{fileName}}</h3>
+          <h3 class="panel-title">{{fileName}}</h3>
         </a>
         <h3 class="panel-title col-xs-3 clearfix">
           <span class="pull-right">&nbsp;</span>
@@ -42,7 +54,7 @@ import MoveModal from './move_modal.vue'
 
 
 module.exports = {
-  props: ['fileId'],
+  props: ['fileId', 'elemType', 'folder'],
   data: function () {
     return {
       showFiles: false,
@@ -64,11 +76,24 @@ module.exports = {
     }
   },
   methods: {
+    getFolderUrl: function (key) {
+      return (this.$route.params.path || "/list") + "/" + key;
+    },
     toggleFiles: function () {
       this.showFiles = !this.showFiles;
     },
     toggleMove: function () {
       this.showMove = !this.showMove;
+    },
+    dragStart: function (e) {
+      e.dataTransfer.setData("json", JSON.stringify(this._props));
+    },
+    preventIfFolder: function (e) {
+      if (this.elemType === 'folder')
+        e.preventDefault();
+    },
+    drop: function (e) {
+      let obj = JSON.parse(e.dataTransfer.getData("json"));
     }
   },
   components: {

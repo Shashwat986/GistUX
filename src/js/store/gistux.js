@@ -2,6 +2,7 @@ function NotLoggedInException () {
   this.message = "No signed in user.";
   this.name = 'NotLoggedInException';
 }
+import FolderModel from './folder_model.js';
 
 const commentMessage = "";
 const gistUXDescription = "";
@@ -9,8 +10,7 @@ const gistUXDescription = "";
 export default {
   state: {
     gistData: null,
-    folderJSON: null,
-    folderJSONObjectID: null,
+    folderJSON: new FolderModel(),
     gistUXFileName: null
   },
   getters: {
@@ -38,22 +38,20 @@ export default {
       state.gistData = data;
     },
     setFolderJSON (state, data = null) {
-      if (data) {
-        if (!data._comment) {
-          data._comment = commentMessage;
-        }
-      }
-      state.folderJSON = data;
+      state.folderJSON.setData(data);
+    },
+    addFilesToFolderJSON(state, files) {
+      state.folderJSON.addFiles(files);
     },
     setFolderJSONObjectID (state, id = null) {
-      state.folderJSONObjectID = id;
+      state.folderJSON.objectID = id;
     }
   },
   actions: {
     setGistData (context, data) {
       context.commit('setGistData', data);
 
-      if (!context.state.folderJSON) {
+      if (context.state.folderJSON.isEmpty()) {
         const fileName = context.getters.gistUXFileName;
         const folderJSONObject = context.state.gistData.find(function (val) {
           return Object.keys(val.files)[0] == fileName;
@@ -74,7 +72,7 @@ export default {
     },
     updateFolderJSON (context, jsonData = undefined) {
       let changed = false;
-      if (!context.state.folderJSON) {
+      if (context.state.folderJSON.isEmpty()) {
         if (jsonData) {
           // If config file exists and no data in $store
           // Copy config content to $store
@@ -85,13 +83,10 @@ export default {
           // If config file doesn't exist and no data in $store
           // Create new $store. Write to config file
 
-          context.commit('setFolderJSON', {
-            root: {
-              // Deep Copy because mutating this shouldn't affect originally fetched data
-              files: context.getters.currentlyExistingFileIDs.slice(0),
-              folders: {}
-            }
-          });
+          context.commit(
+            'addFilesToFolderJSON',
+            context.getters.currentlyExistingFileIDs
+          );
           changed = true;
         }
       } else {
@@ -113,13 +108,13 @@ export default {
         context.dispatch(
           'writeGistContent',
           {
-            gistID: context.state.folderJSONObjectID,
+            gistID: context.state.folderJSON.objectID,
             content: {
               description: gistUXDescription,
               public: false,
               files: {
                 [context.getters.gistUXFileName]: {
-                  content: JSON.stringify(context.state.folderJSON, null, 2)
+                  content: context.state.folderJSON.asJSON()
                 }
               }
             }

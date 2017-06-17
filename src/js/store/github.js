@@ -61,7 +61,6 @@ export default {
         context.commit('setUserData', values[0].data);
         return context.dispatch('setGistData', values[1].data);
       }, function (e) {
-        console.log(e);
         context.dispatch('setError', "Invalid Authentication Key");
         context.commit('destroySession');
         context.commit('hideSpinner');

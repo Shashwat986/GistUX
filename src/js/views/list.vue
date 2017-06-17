@@ -17,22 +17,18 @@
   </p>
   <h2><small>Folders</small></h2>
   <div class="row">
-    <div class="col-md-4 col-xs-6" v-for="(value, key) in currentPath.folders">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <router-link :to="getFolderUrl(key)">
-            <h3 class="panel-title">{{key}}</h3>
-          </router-link>
-        </div>
-      </div>
-    </div>
+    <template v-for="(node, index) in currentPath.children">
+      <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
+      <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
+      <file-item :key="index" :folder="node" elemType="folder"></file-item>
+    </template>
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
-    <template v-for="(item, index) in currentPath.files">
+    <template v-for="(item, index) in currentPath.model.files">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
-      <file-item :key="item" :fileId="item"></file-item>
+      <file-item :key="item" :fileId="item" elemType="file"></file-item>
     </template>
   </div>
 </div>
@@ -61,29 +57,30 @@ module.exports = {
   },
   created: function () {
     if (!this.state.github.githubKey ||
-        !this.state.gistux.folderJSON) {
+        this.state.gistux.folderJSON.isEmpty()) {
       this.$parent.$router.push('/');
       return;
     }
     this.updateDisplayData();
   },
   methods: {
-    getFolderUrl: function (key) {
-      return (this.$route.params.path || "/list") + "/" + key;
-    },
     updateDisplayData: function () {
       this.route = [];
       this.currentPath = null;
 
       let folderPath = this.$route.params.path;
+      let tree = this.$store.state.gistux.folderJSON;
       let root = this.$store.state.gistux.folderJSON.root;
       let path = "/";
 
+      console.log(folderPath);
+
       if (folderPath) {
         for (let key of folderPath.split('/')) {
-          if (root.folders[key]) {
-            root = root.folders[key];
-            path += key
+          let child = tree.getChild(root, key);
+          if (child) {
+            root = child;
+            path += key;
             this.route.push({
               name: key,
               path: path
