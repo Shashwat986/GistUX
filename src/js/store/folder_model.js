@@ -6,31 +6,56 @@ class FolderModel {
 
     /*
       I'm using TreeModel to model the directory structure.
-      Each node represents a folder, which contains an array `files`.
+      Each node represents an object which may be a folder or a file
     */
     this.treeObject = new TreeModel();
     this.root = this.treeObject.parse({
       name: "root",
-      files: []
+      type: "folder"
     });
   }
 
   isEmpty () {
-    return (this.root.model.files.length == 0) && (this.root.children.length == 0);
+    return (this.root.children.length === 0);
+  }
+
+  isFile (node) {
+    return (node.model.type !== 'folder');
+  }
+
+  isFolder (node) {
+    return (node.model.type === 'folder');
   }
 
   // `files` is not mutated. This can be safely called.
-  addFiles (files) {
-    files = new Set([...this.root.model.files, ...files]);
-    this.root.model.files = Array.from(files);
-  }
+  addFiles (files, node = null) {
+    if (node === null) {
+      node = this.root;
+    }
 
-  addFile (node, file) {
+    for (let file of files) {
+      const child_node = this.treeObject.parse({
+        uuid: file
+      });
+      node.addChild(child_node);
+    }
   }
 
   getChild (node, key) {
     return node.children.find(function (elem) {
       return elem.model.name == key;
+    });
+  }
+
+  getFiles (node) {
+    return node.children.filter((elem) => {
+      return this.isFile(elem);
+    });
+  }
+
+  getFolders (node) {
+    return node.children.filter((elem) => {
+      return this.isFolder(elem);
     });
   }
 

@@ -3,8 +3,8 @@
     class="col-xs-6 col-md-4 panel-container"
     draggable="true"
     @dragstart="dragStart"
-    @dragover="preventIfFolder"
     @drop="drop">
+    <!-- if folder -->
     <div class="panel panel-default" v-if="elemType === 'folder'">
       <div class="panel-heading">
         <router-link :to="getFolderUrl(folder.model.name)">
@@ -12,6 +12,7 @@
         </router-link>
       </div>
     </div>
+    <!-- if file -->
     <div :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']" v-else>
       <div class="panel-heading">
         <a :href="fileObject.html_url" target="_blank" :title="fileName">

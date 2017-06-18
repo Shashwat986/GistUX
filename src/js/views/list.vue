@@ -17,18 +17,18 @@
   </p>
   <h2><small>Folders</small></h2>
   <div class="row">
-    <template v-for="(node, index) in currentPath.children">
+    <template v-for="(node, index) in tree.getFolders(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
-      <file-item :key="index" :folder="node" elemType="folder"></file-item>
+      <folder-item :key="index" :folder="node"></folder-item>
     </template>
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
-    <template v-for="(item, index) in currentPath.model.files">
+    <template v-for="(item, index) in tree.getFiles(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
-      <file-item :key="item" :fileId="item" elemType="file"></file-item>
+      <file-item :key="item.model.uuid" :fileId="item.model.uuid" elemType="file"></file-item>
     </template>
   </div>
 </div>
@@ -42,6 +42,7 @@ p.bg-warning {
 
 <script>
 import FileItem from './file_item.vue';
+import FolderItem from './folder_item.vue';
 
 module.exports = {
   data () {
@@ -53,6 +54,9 @@ module.exports = {
   computed: {
     state () {
       return this.$store.state;
+    },
+    tree () {
+      return this.$store.state.gistux.folderJSON;
     }
   },
   created () {
@@ -72,8 +76,6 @@ module.exports = {
       const tree = this.$store.state.gistux.folderJSON;
       let root = this.$store.state.gistux.folderJSON.root;
       let path = '/';
-
-      console.log(folderPath);
 
       if (folderPath) {
         for (let key of folderPath.split('/')) {
@@ -97,7 +99,8 @@ module.exports = {
     $route: 'updateDisplayData'
   },
   components: {
-    'file-item': FileItem
+    'file-item': FileItem,
+    'folder-item': FolderItem
   }
 };
 </script>

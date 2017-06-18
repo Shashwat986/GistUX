@@ -27,6 +27,13 @@ export default {
       return new Map(
         state.gistData.map((val) => [val.id, val])
       );
+    },
+    folderJSONConfigFile (state, getters) {
+      const fileName = getters.gistUXFileName;
+
+      return state.gistData.find((val) => {
+        return Object.keys(val.files)[0] === fileName;
+      });
     }
   },
   mutations: {
@@ -36,10 +43,10 @@ export default {
     setFolderJSON (state, data = null) {
       state.folderJSON.setData(data);
     },
-    addFilesToFolderJSON (state, files) {
-      state.folderJSON.addFiles(files);
+    addFilesToFolderJSON (state, files, node = null) {
+      state.folderJSON.addFiles(files, node);
     },
-    setFolderJSONObjectID (state, id = null) {
+    setFolderJSONConfigFileID (state, id = null) {
       state.folderJSON.objectID = id;
     }
   },
@@ -48,81 +55,72 @@ export default {
       context.commit('setGistData', data);
 
       if (context.state.folderJSON.isEmpty()) {
-        const fileName = context.getters.gistUXFileName;
-        const folderJSONObject = context.state.gistData.find((val) => {
-          return Object.keys(val.files)[0] === fileName;
-        });
+        const folderJSONConfigFile = context.getters.folderJSONConfigFile;
 
-        if (folderJSONObject) {
-          context.commit('setFolderJSONObjectID', folderJSONObject.id);
-
-          context.commit('showSpinner', 'Fetching current folder structure');
-          return context.dispatch('fetchGistContent', folderJSONObject.id).then((resp) => {
-            const fileContent = resp.data.files[fileName].content;
-            context.dispatch('updateFolderJSON', JSON.parse(fileContent));
-          });
+        if (folderJSONConfigFile) {
+          // If there is an existing config file
+          return context.dispatch('fetchConfigAndUpdateFolderJSON');
         }
 
-        return context.dispatch('updateFolderJSON');
+        // If we didn't find a config file
+        return context.dispatch('updateFolderJSON').then(() => {
+          context.dispatch('updateGistUXConfig');
+        });
       }
+
+      // If we have an existing folderJSON object when this is called
+      // Do nothing
       return Promise.resolve(null);
     },
+    fetchConfigAndUpdateFolderJSON (context) {
+      const folderJSONConfigFile = context.getters.folderJSONConfigFile;
+
+      context.commit('setFolderJSONConfigFileID', folderJSONConfigFile.id);
+      context.commit('showSpinner', 'Fetching current folder structure');
+
+      return context.dispatch('fetchGistContent', folderJSONConfigFile.id).then((resp) => {
+        const fileContent = resp.data.files[context.getters.gistUXFileName].content;
+        context.dispatch('updateFolderJSON', JSON.parse(fileContent));
+      });
+    },
     updateFolderJSON (context, jsonData = undefined) {
-      let changed = false;
-      if (context.state.folderJSON.isEmpty()) {
-        if (jsonData) {
-          // If config file exists and no data in $store
-          // Copy config content to $store
+      if (jsonData) {
+        // If data needs to be updated from config file data
+        // Copy config content to $store
 
-          // TODO: Add new files to root folder
-          context.commit('setFolderJSON', jsonData);
-        } else {
-          // If config file doesn't exist and no data in $store
-          // Create new $store. Write to config file
-
-          context.commit(
-            'addFilesToFolderJSON',
-            context.getters.currentlyExistingFileIDs
-          );
-          changed = true;
-        }
+        // TODO: Add new files to root folder
+        context.commit('setFolderJSON', jsonData);
       } else {
-        if (jsonData) { // eslint-disable-line no-lonely-if
-          // If config file exists and data in $store
-          // Overwrite data
+        // If config file doesn't exist and no data in $store
+        // Create new $store.
 
-          context.commit('setFolderJSON', jsonData);
-          changed = true;
-        } else {
-          // If config file doesn't exist and data in $store
-          // Write to config file
-
-          changed = true;
-        }
+        context.commit(
+          'addFilesToFolderJSON',
+          context.getters.currentlyExistingFileIDs
+        );
       }
-
-      if (changed) {
-        context.dispatch(
-          'writeGistContent',
-          {
-            gistID: context.state.folderJSON.objectID,
-            content: {
-              description: gistUXDescription,
-              public: false,
-              files: {
-                [context.getters.gistUXFileName]: {
-                  content: context.state.folderJSON.asJSON()
-                }
+    },
+    updateGistUXConfig (context) {
+      context.dispatch(
+        'writeGistContent',
+        {
+          gistID: context.state.folderJSON.objectID,
+          content: {
+            description: gistUXDescription,
+            public: false,
+            files: {
+              [context.getters.gistUXFileName]: {
+                content: context.state.folderJSON.asJSON()
               }
             }
           }
-        ).then(() => {
-          context.commit('setGistPermission', true);
-        }, () => {
-          context.dispatch('setError', 'Unable to save GistUX file. Have you provided gist access in the generated token?');
-          context.commit('setGistPermission', false);
-        });
-      }
+        }
+      ).then(() => {
+        context.commit('setGistPermission', true);
+      }, () => {
+        context.dispatch('setError', 'Unable to save GistUX file. Have you provided gist access in the generated token?');
+        context.commit('setGistPermission', false);
+      });
     }
   }
 };
