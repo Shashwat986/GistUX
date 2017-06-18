@@ -50,56 +50,58 @@
 </template>
 
 <script>
-import MoveModal from './move_modal.vue'
+import MoveModal from './move_modal.vue';
 
 
 module.exports = {
   props: ['fileId', 'elemType', 'folder'],
-  data: function () {
+  data () {
     return {
       showFiles: false,
       showMove: false
     };
   },
   computed: {
-    canShowFiles: function () {
-      if (Object.keys(this.fileObject.files).length <= 1)
-        return false
+    canShowFiles () {
+      if (Object.keys(this.fileObject.files).length <= 1) {
+        return false;
+      }
 
       return true;
     },
-    fileObject: function () {
+    fileObject () {
       return this.$store.getters.idObjectMapping.get(this.fileId);
     },
-    fileName: function () {
+    fileName () {
       return Object.keys(this.fileObject.files)[0];
     }
   },
   methods: {
-    getFolderUrl: function (key) {
-      return (this.$route.params.path || "/list") + "/" + key;
+    getFolderUrl (key) {
+      return `${(this.$route.params.path || '/list')}/${key}`;
     },
-    toggleFiles: function () {
+    toggleFiles () {
       this.showFiles = !this.showFiles;
     },
-    toggleMove: function () {
+    toggleMove () {
       this.showMove = !this.showMove;
     },
-    dragStart: function (e) {
-      e.dataTransfer.setData("json", JSON.stringify(this._props));
+    dragStart (e) {
+      e.dataTransfer.setData('json', JSON.stringify(this._props));
     },
-    preventIfFolder: function (e) {
-      if (this.elemType === 'folder')
+    preventIfFolder (e) {
+      if (this.elemType === 'folder') {
         e.preventDefault();
+      }
     },
-    drop: function (e) {
-      let obj = JSON.parse(e.dataTransfer.getData("json"));
+    drop (e) {
+      let obj = JSON.parse(e.dataTransfer.getData('json'));
     }
   },
   components: {
-    "move-modal": MoveModal
+    'move-modal': MoveModal
   }
-}
+};
 </script>
 
 <style>

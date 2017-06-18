@@ -25,7 +25,7 @@
 <script>
 module.exports = {
   props: ['fileObject'],
-  data: function () {
+  data () {
     return {
       showNewFolderInput: false,
       currentPath: [],
@@ -33,48 +33,51 @@ module.exports = {
     };
   },
   computed: {
-    currentFolder: function () {
-      let val = this.$store.state.gistux.folderJSON["root"];
+    currentFolder () {
+      let val = this.$store.state.gistux.folderJSON.root;
       for (let key of this.currentPath) {
-        if (val.folders && val.folders[key])
+        if (val.folders && val.folders[key]) {
           val = val.folders[key];
-        else
+        } else {
           break;
+        }
       }
       return val;
     },
-    folderPath: function () {
-      if (this.currentPath.length > 0)
-        return "GistUX / " + this.currentPath.join(" / ");
-      else
-        return "GistUX"
+    folderPath () {
+      if (this.currentPath.length > 0) {
+        return `GistUX / ${this.currentPath.join(' / ')}`;
+      }
+
+      return 'GistUX';
     },
-    validFolderName: function () {
+    validFolderName () {
       // TODO
       return true;
     }
   },
   methods: {
-    toggleNewFolder: function () {
+    toggleNewFolder () {
       this.showNewFolderInput = !this.showNewFolderInput;
     },
-    updatePath: function (val) {
+    updatePath (val) {
       this.currentPath.push(val);
     },
-    removePath: function () {
+    removePath () {
       this.currentPath.pop();
     },
-    createFolder: function () {
+    createFolder () {
       if (!this.validFolderName) return;
 
       // TODO
-      let root = this.$store.state.gistux.folderJSON;
-      let val = root["root"];
+      const root = this.$store.state.gistux.folderJSON;
+      let val = root.root;
       for (let key of this.currentPath) {
-        if (val.folders && val.folders[key])
+        if (val.folders && val.folders[key]) {
           val = val.folders[key];
-        else
+        } else {
           return;
+        }
       }
 
       if (!val.folders) val.folders = {};
@@ -85,11 +88,11 @@ module.exports = {
 
       this.$store.dispatch('updateFolderJSON', root);
     },
-    moveItem: function () {
+    moveItem () {
       // TODO
     }
   }
-}
+};
 </script>
 
 <style>

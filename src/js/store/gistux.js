@@ -1,11 +1,11 @@
+import FolderModel from './folder_model';
+
 function NotLoggedInException () {
-  this.message = "No signed in user.";
+  this.message = 'No signed in user.';
   this.name = 'NotLoggedInException';
 }
-import FolderModel from './folder_model.js';
 
-const commentMessage = "";
-const gistUXDescription = "";
+const gistUXDescription = '';
 
 export default {
   state: {
@@ -16,20 +16,16 @@ export default {
   getters: {
     gistUXFileName (state, getters, rootState) {
       if (!rootState.github.ghUserData) throw new NotLoggedInException();
-      let userData = rootState.github.ghUserData;
+      const userData = rootState.github.ghUserData;
 
       return `GistUX_${userData.login}.json`;
     },
     currentlyExistingFileIDs (state) {
-      return state.gistData.map(function (val) {
-        return val.id;
-      });
+      return state.gistData.map((val) => val.id);
     },
     idObjectMapping (state) {
       return new Map(
-        state.gistData.map(function(val) {
-          return [val.id, val];
-        })
+        state.gistData.map((val) => [val.id, val])
       );
     }
   },
@@ -40,7 +36,7 @@ export default {
     setFolderJSON (state, data = null) {
       state.folderJSON.setData(data);
     },
-    addFilesToFolderJSON(state, files) {
+    addFilesToFolderJSON (state, files) {
       state.folderJSON.addFiles(files);
     },
     setFolderJSONObjectID (state, id = null) {
@@ -53,22 +49,23 @@ export default {
 
       if (context.state.folderJSON.isEmpty()) {
         const fileName = context.getters.gistUXFileName;
-        const folderJSONObject = context.state.gistData.find(function (val) {
-          return Object.keys(val.files)[0] == fileName;
+        const folderJSONObject = context.state.gistData.find((val) => {
+          return Object.keys(val.files)[0] === fileName;
         });
 
         if (folderJSONObject) {
           context.commit('setFolderJSONObjectID', folderJSONObject.id);
 
           context.commit('showSpinner', 'Fetching current folder structure');
-          return context.dispatch('fetchGistContent', folderJSONObject.id).then(function (resp) {
+          return context.dispatch('fetchGistContent', folderJSONObject.id).then((resp) => {
             const fileContent = resp.data.files[fileName].content;
             context.dispatch('updateFolderJSON', JSON.parse(fileContent));
           });
-        } else {
-          return context.dispatch('updateFolderJSON');
         }
+
+        return context.dispatch('updateFolderJSON');
       }
+      return Promise.resolve(null);
     },
     updateFolderJSON (context, jsonData = undefined) {
       let changed = false;
@@ -77,7 +74,7 @@ export default {
           // If config file exists and no data in $store
           // Copy config content to $store
 
-          //TODO: Add new files to root folder
+          // TODO: Add new files to root folder
           context.commit('setFolderJSON', jsonData);
         } else {
           // If config file doesn't exist and no data in $store
@@ -90,7 +87,7 @@ export default {
           changed = true;
         }
       } else {
-        if (jsonData) {
+        if (jsonData) { // eslint-disable-line no-lonely-if
           // If config file exists and data in $store
           // Overwrite data
 
@@ -119,13 +116,13 @@ export default {
               }
             }
           }
-        ).then(function () {
+        ).then(() => {
           context.commit('setGistPermission', true);
-        }, function (err) {
+        }, () => {
           context.dispatch('setError', 'Unable to save GistUX file. Have you provided gist access in the generated token?');
           context.commit('setGistPermission', false);
         });
       }
     }
   }
-}
+};

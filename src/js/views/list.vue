@@ -41,21 +41,21 @@ p.bg-warning {
 </style>
 
 <script>
-import FileItem from './file_item.vue'
+import FileItem from './file_item.vue';
 
 module.exports = {
-  data: function () {
+  data () {
     return {
       route: [],
       currentPath: null
-    }
+    };
   },
   computed: {
-    state: function () {
+    state () {
       return this.$store.state;
     }
   },
-  created: function () {
+  created () {
     if (!this.state.github.githubKey ||
         this.state.gistux.folderJSON.isEmpty()) {
       this.$parent.$router.push('/');
@@ -64,26 +64,26 @@ module.exports = {
     this.updateDisplayData();
   },
   methods: {
-    updateDisplayData: function () {
+    updateDisplayData () {
       this.route = [];
       this.currentPath = null;
 
-      let folderPath = this.$route.params.path;
-      let tree = this.$store.state.gistux.folderJSON;
+      const folderPath = this.$route.params.path;
+      const tree = this.$store.state.gistux.folderJSON;
       let root = this.$store.state.gistux.folderJSON.root;
-      let path = "/";
+      let path = '/';
 
       console.log(folderPath);
 
       if (folderPath) {
         for (let key of folderPath.split('/')) {
-          let child = tree.getChild(root, key);
+          const child = tree.getChild(root, key);
           if (child) {
             root = child;
             path += key;
             this.route.push({
               name: key,
-              path: path
+              path
             });
           } else {
             return;
@@ -97,7 +97,7 @@ module.exports = {
     $route: 'updateDisplayData'
   },
   components: {
-    "file-item": FileItem
+    'file-item': FileItem
   }
-}
+};
 </script>

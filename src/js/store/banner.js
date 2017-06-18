@@ -1,5 +1,3 @@
-import Vuex from 'vuex'
-
 export default {
   state: {
     error: null,
@@ -16,15 +14,15 @@ export default {
   actions: {
     setSuccess (context, message = null) {
       context.commit('setSuccess', message);
-      setTimeout(function () {
+      setTimeout(() => {
         context.commit('setSuccess');
       }, 3000);
     },
     setError (context, message = null) {
       context.commit('setError', message);
-      setTimeout(function () {
+      setTimeout(() => {
         context.commit('setError');
       }, 5000);
     }
   }
-}
+};

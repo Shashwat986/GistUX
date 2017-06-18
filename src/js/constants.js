@@ -1,3 +1,3 @@
 export default {
-  localStorageKey: "gistux_githubKey"
-}
+  localStorageKey: 'gistux_githubKey',
+};

@@ -1,19 +1,19 @@
 import Vue from 'vue';
-import router from './router.js';
+import router from './router';
 import Spinner from './views/spinner.vue';
 import Navbar from './views/navbar.vue';
-import store from './store.js';
-import constants from './constants.js'
+import store from './store';
+import constants from './constants';
 
 window.store = store;
 
 window.vm = {
   content: new Vue({
-    el: "#main",
-    router: router,
-    store: store,
+    el: '#main',
+    router,
+    store,
     computed: {
-      state: function () {
+      state () {
         return this.$store.state;
       }
     },
@@ -22,18 +22,17 @@ window.vm = {
       navbar: Navbar
     },
     methods: {
-      setGithubKey: function (githubKey) {
-        let that = this;
-        this.$store.dispatch('setGithubKey', githubKey).then(function () {
-          that.$router.push('/list');
+      setGithubKey (githubKey) {
+        this.$store.dispatch('setGithubKey', githubKey).then(() => {
+          this.$router.push('/list');
         });
       }
     },
-    created: function () {
-      let key = window.localStorage.getItem(constants.localStorageKey);
+    created () {
+      const key = window.localStorage.getItem(constants.localStorageKey);
       if (key) {
         this.setGithubKey(key);
       }
     }
   })
-}
+};

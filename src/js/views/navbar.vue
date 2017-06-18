@@ -33,21 +33,21 @@
 
 <script>
 module.exports = {
-  data: function () {
+  data () {
     return { githubKey: null };
   },
   props: ['setGithubKey'],
   computed: {
-    state: function () {
+    state () {
       return this.$store.state;
     }
   },
   methods: {
-    endSession: function () {
+    endSession () {
       this.$store.commit('destroySession');
       this.$router.push('/');
       this.$store.dispatch('setSuccess', 'Logged out Successfully!');
     }
   }
-}
+};
 </script>

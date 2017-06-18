@@ -1,12 +1,10 @@
-import Vuex from 'vuex'
-
 export default {
   state: {
     showSpinner: false,
     spinnerMessage: null
   },
   mutations: {
-    showSpinner (state, message = "") {
+    showSpinner (state, message = '') {
       state.spinnerMessage = message;
       state.showSpinner = true;
     },
@@ -14,4 +12,4 @@ export default {
       state.showSpinner = false;
     }
   }
-}
+};

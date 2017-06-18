@@ -1,5 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+/* eslint global-require: "off" */
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 

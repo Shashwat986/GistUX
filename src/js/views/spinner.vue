@@ -104,5 +104,5 @@
 <script>
 module.exports = {
   props: ['message']
-}
+};
 </script>
