@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 const TreeModel = require('tree-model');
 
 class FolderModel {
@@ -10,8 +12,8 @@ class FolderModel {
     */
     this.treeObject = new TreeModel();
     this.root = this.treeObject.parse({
-      name: "root",
-      type: "folder"
+      name: 'root',
+      type: 'folder'
     });
   }
 
@@ -28,22 +30,23 @@ class FolderModel {
   }
 
   // `files` is not mutated. This can be safely called.
-  addFiles (files, node = null) {
-    if (node === null) {
+  addFiles (files, tNode = null) {
+    let node = tNode;
+    if (tNode === null) {
       node = this.root;
     }
 
-    for (let file of files) {
-      const child_node = this.treeObject.parse({
+    for (const file of files) {
+      const childNode = this.treeObject.parse({
         uuid: file
       });
-      node.addChild(child_node);
+      node.addChild(childNode);
     }
   }
 
   getChild (node, key) {
-    return node.children.find(function (elem) {
-      return elem.model.name == key;
+    return node.children.find((elem) => {
+      return elem.model.name === key;
     });
   }
 
@@ -70,14 +73,14 @@ class FolderModel {
   move (file, fromNode, toNode) {
   }
 
-  asJSON() {
+  asJSON () {
     return JSON.stringify(this.root.model, null, 2);
   }
 
-  writeToFile() {
+  writeToFile () {
   }
 
-  readFromFile() {
+  readFromFile () {
   }
 
   validate (jsonData) {
