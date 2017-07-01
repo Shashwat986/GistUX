@@ -50,6 +50,12 @@ class FolderModel {
     });
   }
 
+  getNode (key) {
+    return this.root.children.find((elem) => {
+      return (elem.model.name === key || elem.model.uuid === key);
+    });
+  }
+
   getFiles (node) {
     return node.children.filter((elem) => {
       return this.isFile(elem);

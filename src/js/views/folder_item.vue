@@ -16,12 +16,6 @@
 <script>
 module.exports = {
   props: ['folder'],
-  data () {
-    return {
-      showFiles: false,
-      showMove: false
-    };
-  },
   methods: {
     getFolderUrl (key) {
       return `${(this.$route.params.path || '/list')}/${key}`;
@@ -31,6 +25,7 @@ module.exports = {
     },
     drop (e) {
       let obj = JSON.parse(e.dataTransfer.getData('json'));
+      console.log(this.$store.state.gistux.folderJSON.getNode(obj.fileId));
     }
   }
 };
