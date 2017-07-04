@@ -16,7 +16,7 @@ module.exports = {
         "ignorePropertyModificationsFor": ["state"]
       }],
       "arrow-parens": [2, "always"],
-      "arrow-body-style": 1,
+      "arrow-body-style": [1, "always"],
       "no-underscore-dangle": [2, {
         "allow": [
           "__getScopedUrl", "_requestAllPages",

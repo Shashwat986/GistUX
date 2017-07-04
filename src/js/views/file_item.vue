@@ -2,7 +2,8 @@
   <div
     class="col-xs-6 col-md-4 panel-container"
     draggable="true"
-    @dragstart="dragStart">
+    @dragstart="dragStart"
+    @dragend="dragEnd">
     <div :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']">
       <div class="panel-heading">
         <a :href="fileObject.html_url" target="_blank" :title="fileName">
@@ -75,7 +76,11 @@ module.exports = {
       this.showMove = !this.showMove;
     },
     dragStart (e) {
-      e.dataTransfer.setData('json', JSON.stringify(this._props));
+      e.dataTransfer.setData('json', JSON.stringify({
+        fileId: this.fileId
+      }));
+    },
+    dragEnd (e) {
     }
   },
   components: {

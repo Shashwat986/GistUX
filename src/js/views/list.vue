@@ -22,6 +22,7 @@
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
       <folder-item :key="index" :folder="node"></folder-item>
     </template>
+    <folder-item key="new" folder="new" :current-path="currentPath"></folder-item>
   </div>
   <h2><small>Files</small></h2>
   <div class="row">

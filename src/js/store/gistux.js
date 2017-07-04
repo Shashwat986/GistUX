@@ -9,13 +9,13 @@ const gistUXDescription = '';
 
 export default {
   state: {
-    gistData: null,
+    gistData: [],
     folderJSON: new FolderModel(),
     gistUXFileName: null
   },
   getters: {
     gistUXFileName (state, getters, rootState) {
-      if (!rootState.github.ghUserData) throw new NotLoggedInException();
+      if (!rootState.github.ghUserData) return null;
       const userData = rootState.github.ghUserData;
 
       return `GistUX_${userData.login}.json`;
@@ -53,6 +53,9 @@ export default {
   actions: {
     setGistData (context, data) {
       context.commit('setGistData', data);
+
+      if (context.getters.gistUXFileName === null)
+        throw new NotLoggedInException();
 
       if (context.state.folderJSON.isEmpty()) {
         const folderJSONConfigFile = context.getters.folderJSONConfigFile;

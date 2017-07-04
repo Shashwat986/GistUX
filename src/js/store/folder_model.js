@@ -29,6 +29,34 @@ class FolderModel {
     return (node.model.type === 'folder');
   }
 
+  /* eslint-disable no-param-reassign, no-loop-func */
+  addFolder (folderName = null, parentNode = null) {
+    if (parentNode === null) {
+      parentNode = this.root;
+    }
+    if (folderName === null) {
+      const baseFolderName = 'untitled';
+      folderName = baseFolderName;
+      let i = 0;
+      while (parentNode.children.find((elem) => {
+        return elem.model.name === folderName;
+      })) {
+        folderName = baseFolderName + i;
+        i += 1;
+      }
+    }
+
+    const node = this.treeObject.parse({
+      name: folderName,
+      type: 'folder'
+    });
+
+    parentNode.addChild(node);
+
+    return node;
+  }
+  /* esline-enable no-param-reassign, no-loop-func */
+
   // `files` is not mutated. This can be safely called.
   addFiles (files, tNode = null) {
     let node = tNode;
@@ -36,12 +64,12 @@ class FolderModel {
       node = this.root;
     }
 
-    for (const file of files) {
+    files.forEach((file) => {
       const childNode = this.treeObject.parse({
         uuid: file
       });
       node.addChild(childNode);
-    }
+    });
   }
 
   getChild (node, key) {
@@ -76,7 +104,9 @@ class FolderModel {
     return false;
   }
 
-  move (file, fromNode, toNode) {
+  move (node, toNode) {
+    node.drop();
+    toNode.addChild(node);
   }
 
   asJSON () {
