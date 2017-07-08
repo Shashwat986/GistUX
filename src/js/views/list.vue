@@ -20,7 +20,7 @@
     <template v-for="(node, index) in tree.getFolders(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
-      <folder-item :key="index" :folder="node"></folder-item>
+      <folder-item :key="index" :folder="node" :current-path="currentPath"></folder-item>
     </template>
     <folder-item key="new" folder="new" :current-path="currentPath"></folder-item>
   </div>

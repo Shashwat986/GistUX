@@ -78,8 +78,13 @@ class FolderModel {
     });
   }
 
-  getNode (key) {
-    return this.root.children.find((elem) => {
+  getNode (key, tNode = null) {
+    let node = tNode;
+    if (node === null) {
+      node = this.root;
+    }
+
+    return node.children.find((elem) => {
       return (elem.model.name === key || elem.model.uuid === key);
     });
   }

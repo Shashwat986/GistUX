@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-xs-6 col-md-4 panel-container"
+    class="col-xs-6 col-md-4 panel-container file-panel"
     draggable="true"
     @dragstart="dragStart"
     @dragend="dragEnd">
@@ -94,7 +94,7 @@ module.exports = {
   overflow-x: hidden;
 }
 
-h3.panel-title {
+.file-panel h3.panel-title {
   overflow-x: hidden;
   text-overflow: ellipsis;
   line-height: 1.25em;
