@@ -6,19 +6,15 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <template v-if="typeof folder === 'object'">
-          <template v-if="showEditBox">
-            <h3 :class="['panel-title', 'form-group', {'has-error': editBoxHasError}]">
-              <input :value="folder.model.name" @keyup.enter="updateName" class="form-control"/>
+          <h3 :class="['panel-title', 'form-group', {'has-error': editBoxHasError}]" v-if="showEditBox">
+            <input :value="folder.model.name" @keyup.enter="updateName" @focusout="updateName" class="form-control" v-focus />
+          </h3>
+          <router-link :to="getFolderUrl(folder.model.name)" v-else>
+            <h3 class="panel-title">
+              {{folder.model.name}}
             </h3>
-          </template>
-          <template v-else>
-            <router-link :to="getFolderUrl(folder.model.name)">
-              <h3 class="panel-title">
-                {{folder.model.name}}
-              </h3>
-            </router-link>
-          </template>
-          <span class="pull-right pointer" @click="openEditBox">Edit</span>
+          </router-link>
+          <span class="pull-right pointer" @click="openEditBox" v-show="!showEditBox">Edit</span>
         </template>
         <template v-else>
           <a @click="addFolder" class="pointer">
@@ -36,12 +32,22 @@ module.exports = {
   data () {
     return {
       showEditBox: false,
-      editBoxHasError: false
+      editBoxHasError: false,
     };
   },
   computed: {
     folderJSON () {
       return this.$store.state.gistux.folderJSON;
+    }
+  },
+  directives: {
+    focus: {
+      inserted (el) {
+        el.focus();
+      },
+      update (el) {
+        el.focus();
+      }
     }
   },
   methods: {

@@ -26,25 +26,17 @@
         {{ fileObject.description }}
       </div>
       <div class="panel-footer clearfix">
+        Hello World
         <a @click="toggleFiles" v-if="canShowFiles">
           <span v-if="showFiles">Hide Files</span>
           <span v-else>Show Files</span>
         </a>
-        <a class="pull-right" @click="toggleMove">
-          Move
-        </a>
-      </div>
-      <div class="panel-footer" v-if="showMove">
-        <move-modal :file-object="fileObject"></move-modal>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import MoveModal from './move_modal.vue';
-
-
 module.exports = {
   props: ['fileId'],
   data () {
@@ -82,9 +74,6 @@ module.exports = {
     },
     dragEnd (e) {
     }
-  },
-  components: {
-    'move-modal': MoveModal
   }
 };
 </script>

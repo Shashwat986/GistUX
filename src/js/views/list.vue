@@ -26,6 +26,13 @@
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
+    <div class="col-md-12 filters-nav">
+    <ul class="nav nav-pills pull-right col-md-12">
+      <li role="presentation"><a href="#">Profile</a></li>
+    </ul>
+    </div>
+  </div>
+  <div class="row">
     <template v-for="(item, index) in tree.getFiles(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
@@ -38,6 +45,10 @@
 <style>
 p.bg-warning {
   padding: 10px;
+}
+
+.filter-nav {
+  margin-bottom: 10px;
 }
 </style>
 
