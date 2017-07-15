@@ -26,7 +26,7 @@
         {{ fileObject.description }}
       </div>
       <div class="panel-footer clearfix">
-        Hello World
+        <i :class="[fileObject.public ? 'icon-eye' : 'icon-eye-off']"></i>
         <a @click="toggleFiles" v-if="canShowFiles">
           <span v-if="showFiles">Hide Files</span>
           <span v-else>Show Files</span>
