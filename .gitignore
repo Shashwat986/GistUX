@@ -14,4 +14,4 @@ tags
 
 node_modules
 
-bundle.js
+dist/*
