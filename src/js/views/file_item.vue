@@ -47,11 +47,7 @@ module.exports = {
   },
   computed: {
     canShowFiles () {
-      if (Object.keys(this.fileObject.files).length <= 1) {
-        return false;
-      }
-
-      return true;
+      return !(Object.keys(this.fileObject.files).length <= 1);
     },
     fileObject () {
       return this.$store.getters.idObjectMapping.get(this.fileId);

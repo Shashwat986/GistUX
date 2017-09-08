@@ -19,7 +19,7 @@
   </p>
   <h2><small>Folders</small></h2>
   <div class="row">
-    <template v-for="(node, index) in tree.getFolders(currentPath)">
+    <template v-for="(node, index) in folderJSON.getFolders(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
       <folder-item :key="index" :folder="node" :current-path="currentPath"></folder-item>
@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="row">
-    <template v-for="(item, index) in tree.getFiles(currentPath)">
+    <template v-for="(item, index) in folderJSON.getFiles(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
       <file-item :key="item.model.uuid" :fileId="item.model.uuid"></file-item>
@@ -69,8 +69,8 @@ module.exports = {
     state () {
       return this.$store.state;
     },
-    tree () {
-      return this.$store.state.gistux.folderJSON;
+    folderJSON () {
+      return window.folderJSON;
     }
   },
   created () {
@@ -82,13 +82,12 @@ module.exports = {
       this.currentPath = null;
 
       const folderPath = this.$route.params.path;
-      const tree = this.$store.state.gistux.folderJSON;
-      let root = this.$store.state.gistux.folderJSON.root;
+      let root = this.folderJSON.root;
       let path = '/';
 
       if (folderPath) {
         for (let key of folderPath.split('/')) {
-          const child = tree.getChild(root, key);
+          const child = this.folderJSON.getChild(root, key);
           if (child) {
             root = child;
             path += key;

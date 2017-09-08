@@ -37,7 +37,7 @@ module.exports = {
   },
   computed: {
     folderJSON () {
-      return this.$store.state.gistux.folderJSON;
+      return window.folderJSON;
     }
   },
   directives: {
@@ -55,10 +55,11 @@ module.exports = {
       return `${(this.$route.params.path || '/list')}/${key}`;
     },
     addFolder () {
-      const retVal = this.$store.commit('addFolderToFolderJSON', {
+      this.$store.commit('addFolderToFolderJSON', {
         folderName: null,
         node: this.currentPath
       });
+      const retVal = this.$store.state.gistux.mutationReturnValue;
       this.$store.dispatch('updateGistUXConfig');
       return retVal;
     },
@@ -69,22 +70,11 @@ module.exports = {
         return;
       }
 
-      // TODO: Move this to FolderModel
-      const folderNames = this.folderJSON.
-        getFolders(this.folder.parent).
-        map((folder) => {
-          // To ensure that the same filename isn't rejected
-          if (folder.model === this.folder.model)
-            return null;
-          return folder.model.name;
-        });
-
-      if (folderNames.includes(newFolderName)) {
-        this.editBoxHasError = true;
-      } else {
-        this.folder.model.name = newFolderName;
+      if (this.folderJSON.updateFolderName(this.folder, newFolderName)) {
         this.$store.dispatch('updateGistUXConfig');
         this.closeEditBox();
+      } else {
+        this.editBoxHasError = true;
       }
     },
     openEditBox () {
@@ -97,13 +87,12 @@ module.exports = {
     drop (e) {
       const obj = JSON.parse(e.dataTransfer.getData('json'));
       const fileNode = this.folderJSON.getNode(obj.fileId, this.currentPath);
+
       let currentFolder = this.folder;
-      console.log(currentFolder);
       if (this.folder === 'new') {
-        currentFolder = this.folderJSON.addFolder(null, this.currentPath);
+        currentFolder = this.addFolder();
       }
 
-      console.log(currentFolder);
       this.$store.commit('folderJSONmoveFile', {
         fileNode: fileNode,
         folder: currentFolder

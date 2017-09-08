@@ -22,26 +22,29 @@ import {objectEqual} from '../util/string';
 module.exports = {
   data () {
     return {
-      tempJSON: this.$store.getters.folderJSONasJSON,
+      tempJSON: window.folderJSON.asJSON(),
       jsonEdited: false,
       jsonHasError: false
     };
   },
   computed: {
-    folderJSONasJSON: function () {
-      return this.$store.getters.folderJSONasJSON;
-    },
     folderJSON: function () {
-      return this.$store.state.gistux.folderJSON;
+      return window.folderJSON;
+    },
+    folderJSONChanged: function () {
+      return this.$store.state.gistux.folderJSONChanged;
     }
   },
   watch: {
-    folderJSONasJSON: function () {
-      console.log("folderJSONChanged");
+    folderJSONChanged: function () {
+      if (!this.folderJSONChanged) return;
+
       if (!this.jsonEdited) {
         // If the JSON has not been user-edited, but the source JSON has changed
-        this.tempJSON = this.folderJSONasJSON;
+        this.tempJSON = this.folderJSON.asJSON();
       }
+
+      this.$store.commit('folderJSONChangeConsumed');
     },
     tempJSON: function () {
       this.jsonEdited = true;

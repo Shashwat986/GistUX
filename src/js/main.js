@@ -4,8 +4,11 @@ import Spinner from './views/spinner.vue';
 import Navbar from './views/navbar.vue';
 import store from './store';
 import constants from './constants';
+import FolderModel from './folder_model';
 
 window.store = store;
+
+window.folderJSON = new FolderModel();
 
 window.vm = new Vue({
   el: '#main',

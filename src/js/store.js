@@ -9,8 +9,7 @@ const store = new Vuex.Store({
     github: require('./store/github.js').default,
     spinner: require('./store/spinner.js').default,
     banner: require('./store/banner.js').default,
-    gistux: require('./store/gistux.js').default,
-    list: require('./store/list.js').default
+    gistux: require('./store/gistux.js').default
   }
 });
 

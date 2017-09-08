@@ -13,7 +13,7 @@ const routes = [
     beforeEnter (to, from, next) {
       const state = store.state;
       if (!state.github.githubKey ||
-          state.gistux.folderJSON.isEmpty()) {
+          window.folderJSON.isEmpty()) {
         next(false);
       } else {
         next();

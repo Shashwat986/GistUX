@@ -1,5 +1,3 @@
-import FolderModel from './folder_model';
-
 function NotLoggedInException () {
   this.message = 'No signed in user.';
   this.name = 'NotLoggedInException';
@@ -10,8 +8,9 @@ const gistUXDescription = '';
 export default {
   state: {
     gistData: [],
-    folderJSON: new FolderModel(),
-    gistUXFileName: null
+    gistUXFileName: null,
+    mutationReturnValue: null,
+    folderJSONChanged: false
   },
   getters: {
     gistUXFileName (state, getters, rootState) {
@@ -34,31 +33,39 @@ export default {
       return state.gistData.find((val) => {
         return Object.keys(val.files)[0] === fileName;
       });
-    },
-    folderJSONasJSON (state) {
-      return state.folderJSON.asJSON();
     }
   },
   mutations: {
     setGistData (state, data = null) {
       state.gistData = data;
     },
+    folderJSONChanged (state) {
+      state.folderJSONChanged = true;
+    },
+    folderJSONChangeConsumed (state) {
+      state.folderJSONChanged = false;
+    },
     setFolderJSON (state, data = null) {
-      return state.folderJSON.setData(data);
+      window.folderJSON.setData(data);
+      state.folderJSONChanged = true;
     },
     addFilesToFolderJSON (state, files) {
-      state.folderJSON.addFiles(files, null);
+      window.folderJSON.addFiles(files, null);
+      state.folderJSONChanged = true;
     },
     addFolderToFolderJSON (state, payload) {
       const {folderName, node} = payload;
-      state.folderJSON.addFolder(folderName, node);
+      let response = window.folderJSON.addFolder(folderName, node);
+      state.folderJSONChanged = true;
+      state.mutationReturnValue = response;
     },
     folderJSONmoveFile (state, payload) {
       const {fileNode, folder} = payload;
-      state.folderJSON.move(fileNode, folder);
+      window.folderJSON.move(fileNode, folder);
+      state.folderJSONChanged = true;
     },
     setFolderJSONConfigFileID (state, id = null) {
-      state.folderJSON.objectID = id;
+      window.folderJSON.objectID = id;
     }
   },
   actions: {
@@ -68,7 +75,7 @@ export default {
       if (context.getters.gistUXFileName === null)
         throw new NotLoggedInException();
 
-      if (context.state.folderJSON.isEmpty()) {
+      if (window.folderJSON.isEmpty()) {
         const folderJSONConfigFile = context.getters.folderJSONConfigFile;
 
         if (folderJSONConfigFile) {
@@ -118,13 +125,13 @@ export default {
       return context.dispatch(
         'writeGistContent',
         {
-          gistID: context.state.folderJSON.objectID,
+          gistID: window.folderJSON.objectID,
           content: {
             description: gistUXDescription,
             public: false,
             files: {
               [context.getters.gistUXFileName]: {
-                content: context.state.folderJSON.asJSON()
+                content: window.folderJSON.asJSON()
               }
             }
           }
