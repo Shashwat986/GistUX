@@ -54,13 +54,13 @@ export default {
       state.folderJSONChanged = true;
     },
     addFolderToFolderJSON (state, payload) {
-      const {folderName, node} = payload;
-      let response = window.folderJSON.addFolder(folderName, node);
+      const { folderName, node } = payload;
+      const response = window.folderJSON.addFolder(folderName, node);
       state.folderJSONChanged = true;
       state.mutationReturnValue = response;
     },
     folderJSONmoveFile (state, payload) {
-      const {fileNode, folder} = payload;
+      const { fileNode, folder } = payload;
       window.folderJSON.move(fileNode, folder);
       state.folderJSONChanged = true;
     },
@@ -72,8 +72,9 @@ export default {
     setGistData (context, data) {
       context.commit('setGistData', data);
 
-      if (context.getters.gistUXFileName === null)
+      if (context.getters.gistUXFileName === null) {
         throw new NotLoggedInException();
+      }
 
       if (window.folderJSON.isEmpty()) {
         const folderJSONConfigFile = context.getters.folderJSONConfigFile;

@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import store from './store';
 import VueRouter from 'vue-router';
+import store from './store';
 import List from './views/list.vue';
 import Config from './views/config.vue';
 
@@ -21,7 +21,7 @@ const routes = [
     }
   },
   {
-    path: "/config",
+    path: '/config',
     component: Config
   }
 ];

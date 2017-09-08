@@ -22,6 +22,7 @@ module.exports = {
           "__getScopedUrl", "_requestAllPages",
           "_props"
         ]
-      }]
+      }],
+      "import/prefer-default-export": [1, "always"]
     }
 };

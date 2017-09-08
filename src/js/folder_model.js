@@ -103,18 +103,21 @@ class FolderModel {
 
   folderNames (node) {
     return this.getFolders(node.parent).map((folder) => {
-      if (folder.model === node.model)
+      if (folder.model === node.model) {
         return null;
+      }
       return folder.model.name;
     });
   }
 
   updateFolderName (node, name) {
-    if (!this.isFolder(node))
+    if (!this.isFolder(node)) {
       return false;
+    }
 
-    if (this.folderNames(node).includes(name))
+    if (this.folderNames(node).includes(name)) {
       return false;
+    }
 
     node.model.name = name;
     return true;
