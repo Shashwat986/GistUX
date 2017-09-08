@@ -14,6 +14,8 @@
     Please note that GistUX does not have write permissions to your gists. This tool may not have access to your private gists, and all changes made here will not be saved.
     <br/>
     Fix this by <a href="https://github.com/settings/tokens" target="_blank">regenerating your Github Token</a> and giving it the <i>gist</i> permission.
+    <br />
+    If you wish to go ahead with this, you may import/export your temporary config file from <router-link to="/config">here</router-link>
   </p>
   <h2><small>Folders</small></h2>
   <div class="row">
@@ -72,11 +74,6 @@ module.exports = {
     }
   },
   created () {
-    if (!this.state.github.githubKey ||
-        this.state.gistux.folderJSON.isEmpty()) {
-      this.$parent.$router.push('/');
-      return;
-    }
     this.updateDisplayData();
   },
   methods: {

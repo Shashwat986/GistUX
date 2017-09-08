@@ -9,7 +9,7 @@
           <h3 :class="['panel-title', 'form-group', {'has-error': editBoxHasError}]" v-if="showEditBox">
             <input :value="folder.model.name" @keyup.enter="updateName" @focusout="updateName" class="form-control" v-focus />
           </h3>
-          <router-link :to="getFolderUrl(folder.model.name)" v-else>
+          <router-link :to="getFolderUrl(folder.model.name)" class="pointer" v-else>
             <h3 class="panel-title">
               {{folder.model.name}}
             </h3>
@@ -18,7 +18,7 @@
         </template>
         <template v-else>
           <a @click="addFolder" class="pointer">
-            <h3 class="panel-title">New Folder</h3>
+            <h3 class="panel-title">Create New Folder</h3>
           </a>
         </template>
       </div>
@@ -55,8 +55,12 @@ module.exports = {
       return `${(this.$route.params.path || '/list')}/${key}`;
     },
     addFolder () {
-      return this.folderJSON.addFolder(null, this.currentPath);
+      const retVal = this.$store.commit('addFolderToFolderJSON', {
+        folderName: null,
+        node: this.currentPath
+      });
       this.$store.dispatch('updateGistUXConfig');
+      return retVal;
     },
     updateName (e) {
       const newFolderName = e.currentTarget.value;
@@ -94,11 +98,17 @@ module.exports = {
       const obj = JSON.parse(e.dataTransfer.getData('json'));
       const fileNode = this.folderJSON.getNode(obj.fileId, this.currentPath);
       let currentFolder = this.folder;
+      console.log(currentFolder);
       if (this.folder === 'new') {
         currentFolder = this.folderJSON.addFolder(null, this.currentPath);
       }
 
-      this.folderJSON.move(fileNode, currentFolder);
+      console.log(currentFolder);
+      this.$store.commit('folderJSONmoveFile', {
+        fileNode: fileNode,
+        folder: currentFolder
+      })
+
       this.$store.dispatch('updateGistUXConfig');
     }
   }

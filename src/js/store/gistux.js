@@ -34,6 +34,9 @@ export default {
       return state.gistData.find((val) => {
         return Object.keys(val.files)[0] === fileName;
       });
+    },
+    folderJSONasJSON (state) {
+      return state.folderJSON.asJSON();
     }
   },
   mutations: {
@@ -41,10 +44,18 @@ export default {
       state.gistData = data;
     },
     setFolderJSON (state, data = null) {
-      state.folderJSON.setData(data);
+      return state.folderJSON.setData(data);
     },
-    addFilesToFolderJSON (state, files, node = null) {
-      state.folderJSON.addFiles(files, node);
+    addFilesToFolderJSON (state, files) {
+      state.folderJSON.addFiles(files, null);
+    },
+    addFolderToFolderJSON (state, payload) {
+      const {folderName, node} = payload;
+      state.folderJSON.addFolder(folderName, node);
+    },
+    folderJSONmoveFile (state, payload) {
+      const {fileNode, folder} = payload;
+      state.folderJSON.move(fileNode, folder);
     },
     setFolderJSONConfigFileID (state, id = null) {
       state.folderJSON.objectID = id;
@@ -104,7 +115,7 @@ export default {
       }
     },
     updateGistUXConfig (context) {
-      context.dispatch(
+      return context.dispatch(
         'writeGistContent',
         {
           gistID: context.state.folderJSON.objectID,

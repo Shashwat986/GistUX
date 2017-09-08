@@ -25,6 +25,7 @@ export default {
       state.gh = null;
       state.ghUser = null;
       state.ghUserData = null;
+      window.location.reload();
     },
     setUser (state, user) {
       state.ghUser = user;
