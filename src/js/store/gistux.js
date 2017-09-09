@@ -1,3 +1,5 @@
+import {difference} from '../util/string';
+
 function NotLoggedInException () {
   this.message = 'No signed in user.';
   this.name = 'NotLoggedInException';
@@ -103,6 +105,20 @@ export default {
       return context.dispatch('fetchGistContent', folderJSONConfigFile.id).then((resp) => {
         const fileContent = resp.data.files[context.getters.gistUXFileName].content;
         context.dispatch('updateFolderJSON', JSON.parse(fileContent));
+
+        // Add new files to root folder
+        const extraFiles = difference(
+          context.getters.currentlyExistingFileIDs,
+          window.folderJSON.allFiles()
+        )
+
+        if (extraFiles.length > 0) {
+          context.commit(
+            'addFilesToFolderJSON',
+            extraFiles
+          )
+          context.dispatch('updateGistUXConfig');
+        }
       });
     },
     updateFolderJSON (context, jsonData = undefined) {
@@ -110,7 +126,6 @@ export default {
         // If data needs to be updated from config file data
         // Copy config content to $store
 
-        // TODO: Add new files to root folder
         context.commit('setFolderJSON', jsonData);
       } else {
         // If config file doesn't exist and no data in $store

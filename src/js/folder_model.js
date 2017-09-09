@@ -29,6 +29,12 @@ class FolderModel {
     return (node.model.type === 'folder');
   }
 
+  allFiles () {
+    return this.root.all((node) => {
+      return this.isFile(node);
+    }).map((node) => node.model.uuid);
+  }
+
   /* eslint-disable no-param-reassign, no-loop-func */
   addFolder (folderName = null, parentNode = null) {
     if (parentNode === null) {
