@@ -1,10 +1,12 @@
 <template>
   <div
     class="col-xs-6 col-md-4 panel-container file-panel"
-    draggable="true"
+    :draggable="!loading"
     @dragstart="dragStart"
     @dragend="dragEnd">
-    <div :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']">
+    <div
+      :class="['panel', fileObject.public ? 'panel-info' : 'panel-warning']"
+      v-if="!loading">
       <div class="panel-heading">
         <a :href="fileObject.html_url" target="_blank" :title="fileName">
           <h3 class="panel-title">{{fileName}}</h3>
@@ -33,14 +35,33 @@
         </a>
       </div>
     </div>
+    <div v-else-if="errored" class="panel panel-default">
+      <div class="panel-heading">
+        Invalid Entry
+      </div>
+      <div class="panel-body">
+        Invalid File ID: {{fileId}}
+      </div>
+    </div>
+    <div v-else class="panel panel-default">
+      <div class="panel-heading">
+        Loading...
+      </div>
+      <div class="panel-body">
+        <spinner :small="true"></spinner>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Spinner from './spinner.vue';
 module.exports = {
   props: ['fileId'],
   data () {
     return {
+      loading: false,
+      errored: false,
       showFiles: false,
       showMove: false
     };
@@ -50,7 +71,11 @@ module.exports = {
       return !(Object.keys(this.fileObject.files).length <= 1);
     },
     fileObject () {
-      return this.$store.getters.idObjectMapping.get(this.fileId);
+      const val = this.$store.getters.idObjectMapping.get(this.fileId);
+      if (val != null) {
+        this.loading = false;
+      }
+      return val;
     },
     fileName () {
       return Object.keys(this.fileObject.files)[0];
@@ -70,6 +95,20 @@ module.exports = {
     },
     dragEnd (e) {
     }
+  },
+  created () {
+    if (this.fileObject == null) {
+      this.loading = true;
+      this.$store.dispatch('getGistDataAndUpdateMap', this.fileId).then(() => {
+        this.loading = false;
+      }, () => {
+        this.errored = true;
+        // Note: loading stays true because that's how the conditions are set
+      });
+    }
+  },
+  components: {
+    'spinner': Spinner
   }
 };
 </script>

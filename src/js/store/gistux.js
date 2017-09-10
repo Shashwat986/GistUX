@@ -41,6 +41,9 @@ export default {
     setGistData (state, data = null) {
       state.gistData = data;
     },
+    addElementToGistData (state, elem) {
+      state.gistData.push(elem);
+    },
     folderJSONChanged (state) {
       state.folderJSONChanged = true;
     },
@@ -157,6 +160,11 @@ export default {
       }, () => {
         context.dispatch('setError', 'Unable to save GistUX file. Have you provided gist access in the generated token?');
         context.commit('setGistPermission', false);
+      });
+    },
+    getGistDataAndUpdateMap (context, gistID) {
+      return context.dispatch('fetchGistContent', gistID).then((data) => {
+        context.commit('addElementToGistData', data.data);
       });
     }
   }

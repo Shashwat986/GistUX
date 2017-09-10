@@ -1,7 +1,7 @@
 <template>
 <!-- Using the folding-cube spinner from http://tobiasahlin.com/spinkit/ -->
 <div>
-  <div class="sk-folding-cube">
+  <div :class="{'sk-folding-cube': true, small: small}">
     <div class="sk-cube1 sk-cube"></div>
     <div class="sk-cube2 sk-cube"></div>
     <div class="sk-cube4 sk-cube"></div>
@@ -19,6 +19,12 @@
   position: relative;
   -webkit-transform: rotateZ(45deg);
           transform: rotateZ(45deg);
+}
+
+.sk-folding-cube.small {
+  margin: 0px auto;
+  width: 20px;
+  height: 20px;
 }
 
 .sk-folding-cube .sk-cube {
@@ -103,6 +109,12 @@
 
 <script>
 module.exports = {
-  props: ['message']
+  props: {
+    message: null,
+    small: {
+      type: Boolean,
+      default: false
+    }
+  }
 };
 </script>
