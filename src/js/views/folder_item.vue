@@ -61,6 +61,7 @@ module.exports = {
       });
       const retVal = this.$store.state.gistux.mutationReturnValue;
       this.$store.dispatch('updateGistUXConfig');
+      this.$store.commit('setRecentlyCreatedFolder', retVal);
       return retVal;
     },
     updateName (e) {
@@ -99,6 +100,12 @@ module.exports = {
       })
 
       this.$store.dispatch('updateGistUXConfig');
+    }
+  },
+  created () {
+    if (this.$store.getters.isRecentlyCreatedFolder(this.folder)) {
+      this.openEditBox();
+      this.$store.commit('setRecentlyCreatedFolder');
     }
   }
 };

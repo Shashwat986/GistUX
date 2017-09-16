@@ -85,6 +85,7 @@ module.exports = {
       let root = this.folderJSON.root;
       let path = '/';
 
+      // TODO: Move to folder_model
       if (folderPath) {
         for (let key of folderPath.split('/')) {
           const child = this.folderJSON.getChild(root, key);

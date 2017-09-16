@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 
+import {objectEqual} from './util/string';
 const TreeModel = require('tree-model');
 
 class FolderModel {
@@ -33,6 +34,12 @@ class FolderModel {
     return this.root.all((node) => {
       return this.isFile(node);
     }).map((node) => node.model.uuid);
+  }
+
+  objectEqual (node1, node2) {
+    const path1 = node1.getPath().map((e) => e.model.name);
+    const path2 = node2.getPath().map((e) => e.model.name);
+    return (objectEqual(path1, path2) && objectEqual(node1.model, node2.model));
   }
 
   /* eslint-disable no-param-reassign, no-loop-func */
