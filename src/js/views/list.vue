@@ -83,7 +83,7 @@ module.exports = {
 
       const folderPath = this.$route.params.path;
       let root = this.folderJSON.root;
-      let path = '/';
+      let path = '';
 
       // TODO: Move to folder_model
       if (folderPath) {
@@ -91,7 +91,7 @@ module.exports = {
           const child = this.folderJSON.getChild(root, key);
           if (child) {
             root = child;
-            path += key;
+            path += '/' + key;
             this.route.push({
               name: key,
               path

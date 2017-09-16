@@ -52,7 +52,7 @@ module.exports = {
   },
   methods: {
     getFolderUrl (key) {
-      return `${(this.$route.params.path || '/list')}/${key}`;
+      return `${(this.$route.path || '/list')}/${key}`;
     },
     addFolder () {
       this.$store.commit('addFolderToFolderJSON', {
