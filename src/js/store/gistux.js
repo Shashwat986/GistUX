@@ -1,4 +1,4 @@
-import {difference} from '../util/string';
+import { difference } from '../util/string';
 
 function NotLoggedInException () {
   this.message = 'No signed in user.';
@@ -113,13 +113,13 @@ export default {
         const extraFiles = difference(
           context.getters.currentlyExistingFileIDs,
           window.folderJSON.allFiles()
-        )
+        );
 
         if (extraFiles.length > 0) {
           context.commit(
             'addFilesToFolderJSON',
             extraFiles
-          )
+          );
           context.dispatch('updateGistUXConfig');
         }
       });

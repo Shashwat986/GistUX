@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
-import {objectEqual} from './util/string';
+import { objectEqual } from './util/string';
+
 const TreeModel = require('tree-model');
 
 class FolderModel {
