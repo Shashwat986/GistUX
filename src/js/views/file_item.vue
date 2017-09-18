@@ -33,6 +33,12 @@
           <span v-if="showFiles">Hide Files</span>
           <span v-else>Show Files</span>
         </a>
+        <a class="pull-right" @click="toggleMove">
+          Move
+        </a>
+      </div>
+      <div class="panel-footer" v-if="showMove">
+        <move-modal :fileNode="node"></move-modal>
       </div>
     </div>
     <div v-else-if="errored" class="panel panel-default">
@@ -56,10 +62,13 @@
 
 <script>
 import Spinner from './spinner.vue';
+import MoveModal from './move_modal.vue';
+
 module.exports = {
-  props: ['fileId'],
+  props: ['node'],
   data () {
     return {
+      fileId: this.node.model.uuid,
       loading: false,
       errored: false,
       showFiles: false,
@@ -108,7 +117,8 @@ module.exports = {
     }
   },
   components: {
-    'spinner': Spinner
+    'spinner': Spinner,
+    'move-modal': MoveModal
   }
 };
 </script>

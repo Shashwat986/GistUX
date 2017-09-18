@@ -37,9 +37,50 @@ class FolderModel {
     }).map((node) => node.model.uuid);
   }
 
+  getNodeFromPath (folderPath) {
+    let node = this.root;
+    let path = folderPath;
+
+    if (path == null) {
+      return node;
+    }
+
+    if (typeof path === "string") {
+      path = path.split('/');
+    }
+
+    for (let key of path) {
+      const child = this.getChild(node, key);
+      if (child) {
+        node = child;
+      } else {
+        return null;
+      }
+    }
+
+    return node;
+  }
+
+  getPathFolders (node) {
+    return node.getPath().map((e) => e.model.name);
+  }
+
+  getPathBreadcrumb (node) {
+    let path = '';
+    let folders =  this.getPathFolders(node);
+    folders.shift(); // Removing root element
+    return folders.map((elem) => {
+      path += '/' + elem;
+      return {
+        name: elem,
+        path
+      };
+    })
+  }
+
   objectEqual (node1, node2) {
-    const path1 = node1.getPath().map((e) => e.model.name);
-    const path2 = node2.getPath().map((e) => e.model.name);
+    const path1 = this.getPathFolders(node1);
+    const path2 = this.getPathFolders(node2);
     return (objectEqual(path1, path2) && objectEqual(node1.model, node2.model));
   }
 

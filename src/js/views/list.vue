@@ -38,7 +38,7 @@
     <template v-for="(item, index) in folderJSON.getFiles(currentPath)">
       <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
-      <file-item :key="item.model.uuid" :fileId="item.model.uuid"></file-item>
+      <file-item :key="item.model.uuid" :node="item"></file-item>
     </template>
   </div>
 </div>
@@ -78,30 +78,11 @@ module.exports = {
   },
   methods: {
     updateDisplayData () {
-      this.route = [];
-      this.currentPath = null;
-
       const folderPath = this.$route.params.path;
-      let root = this.folderJSON.root;
-      let path = '';
-
-      // TODO: Move to folder_model
-      if (folderPath) {
-        for (let key of folderPath.split('/')) {
-          const child = this.folderJSON.getChild(root, key);
-          if (child) {
-            root = child;
-            path += '/' + key;
-            this.route.push({
-              name: key,
-              path
-            });
-          } else {
-            return;
-          }
-        }
+      this.currentPath = this.folderJSON.getNodeFromPath(folderPath);
+      if (this.currentPath != null) {
+        this.route = this.folderJSON.getPathBreadcrumb(this.currentPath);
       }
-      this.currentPath = root;
     }
   },
   watch: {
