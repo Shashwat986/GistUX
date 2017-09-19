@@ -99,7 +99,7 @@ module.exports = {
     },
     dragStart (e) {
       e.dataTransfer.setData('json', JSON.stringify({
-        fileId: this.fileId
+        uuid: this.fileId
       }));
     },
     dragEnd (e) {

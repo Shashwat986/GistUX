@@ -1,6 +1,9 @@
 <template>
   <div
     class="col-xs-6 col-md-4 panel-container folder-panel"
+    draggable="true"
+    @dragstart="dragStart"
+    @dragend="dragEnd"
     @dragover.prevent
     @drop="drop">
     <div class="panel panel-default">
@@ -85,9 +88,21 @@ module.exports = {
       this.editBoxHasError = false;
       this.showEditBox = false;
     },
+    dragStart (e) {
+      // Note: We are not sending any information about the path to the node
+      //       This is because we are assuming that drag ends in the same context
+      e.dataTransfer.setData('json', JSON.stringify({
+        uuid: this.folder.model.name,
+      }));
+    },
+    dragEnd () {
+    },
     drop (e) {
       const obj = JSON.parse(e.dataTransfer.getData('json'));
-      const fileNode = this.folderJSON.getNode(obj.fileId, this.currentPath);
+      // Note: This assumes that drag starts in the same context
+      //       (Yes, even for files [FIXME?])
+      //       (a reasonable assumption)
+      const fileNode = this.folderJSON.getNode(obj.uuid, this.currentPath);
 
       let currentFolder = this.folder;
       if (this.folder === 'new') {
