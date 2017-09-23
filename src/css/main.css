@@ -13,3 +13,11 @@
 .pointer {
   cursor: pointer;
 }
+
+.font-bold {
+  font-weight: bold !important;
+}
+
+.no-outline {
+  outline: none !important;
+}

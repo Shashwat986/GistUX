@@ -30,15 +30,15 @@
   <div class="row">
     <div class="col-md-12 filters-nav">
     <ul class="nav nav-pills pull-right col-md-12">
-      <li role="presentation" :class="['dropdown', {open: showLanguageDropdown}]">
-        <a class="dropdown-toggle" @click="(showLanguageDropdown = !showLanguageDropdown)">Language</a>
+      <li tabindex="0" role="presentation" :class="['dropdown', 'no-outline', {open: showLanguageDropdown}]" @focusout="showLanguageDropdown = false">
+        <a class="dropdown-toggle pointer" @click="(showLanguageDropdown = !showLanguageDropdown)">Language</a>
         <ul class="dropdown-menu">
           <li>
-            <a @click="selectLanguage(null)">All</a>
+            <a class="pointer" @click="selectLanguage(null)">All</a>
           </li>
           <li role="separator" class="divider"></li>
           <li v-for="language in Object.keys(state.search.languageHash)">
-            <a @click="selectLanguage(language)">{{language}}</a>
+            <a :class="['pointer', {'font-bold': (selectedLanguage === language)}]" @click="selectLanguage(language)">{{language}}</a>
           </li>
         </ul>
       </li>
