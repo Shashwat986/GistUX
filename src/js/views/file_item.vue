@@ -64,7 +64,7 @@
 import Spinner from './spinner.vue';
 import MoveModal from './move_modal.vue';
 
-module.exports = {
+export default {
   props: ['node'],
   data () {
     return {

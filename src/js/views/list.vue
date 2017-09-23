@@ -69,7 +69,7 @@ p.bg-warning {
 import FileItem from './file_item.vue';
 import FolderItem from './folder_item.vue';
 
-module.exports = {
+export default {
   data () {
     return {
       route: [],

@@ -108,7 +108,7 @@
 </style>
 
 <script>
-module.exports = {
+export default {
   props: {
     message: null,
     small: {

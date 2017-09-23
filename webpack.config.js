@@ -21,16 +21,14 @@ module.exports = {
       }
     ])
   ],
-  vue: {
-    loaders: {
-      js: 'babel?presets[]=es2015'
-    }
-  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.vue$/,
         loader: 'vue-loader',
+        options: {
+          js: 'babel?presets[]=es2015'
+        }
       },
       {
         test: /\.js$/,
@@ -42,11 +40,14 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       },
       {
         test: /\.(jpe?g|gif|png|svg|woff2?|eot|ttf|wav|mp3)(\?.*$|$)/,
-        loader: 'file'
+        loader: 'file-loader'
       }
     ]
   }

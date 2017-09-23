@@ -19,7 +19,7 @@
 <script>
 import {objectEqual} from '../util/string';
 
-module.exports = {
+export default {
   data () {
     return {
       tempJSON: window.folderJSON.asJSON(),
