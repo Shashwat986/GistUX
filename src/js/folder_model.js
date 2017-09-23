@@ -45,11 +45,11 @@ class FolderModel {
       return node;
     }
 
-    if (typeof path === "string") {
+    if (typeof path === 'string') {
       path = path.split('/');
     }
 
-    for (let key of path) {
+    for (const key of path) {
       const child = this.getChild(node, key);
       if (child) {
         node = child;
@@ -67,15 +67,15 @@ class FolderModel {
 
   getPathBreadcrumb (node) {
     let path = '';
-    let folders =  this.getPathFolders(node);
+    const folders = this.getPathFolders(node);
     folders.shift(); // Removing root element
     return folders.map((elem) => {
-      path += '/' + elem;
+      path += `/${elem}`;
       return {
         name: elem,
         path
       };
-    })
+    });
   }
 
   objectEqual (node1, node2) {
@@ -174,6 +174,11 @@ class FolderModel {
       return false;
     }
 
+    // Validate Folder Name
+    if (name.indexOf('/') !== -1) {
+      return false;
+    }
+
     node.model.name = name;
     return true;
   }
@@ -204,6 +209,14 @@ class FolderModel {
   validate (jsonData) {
     // TODO
     return true;
+  }
+
+  validateFile (fileContent) {
+    try {
+      JSON.parse(fileContent);
+    } catch (e) {
+      return false;
+    }
   }
 }
 

@@ -8,7 +8,7 @@ export default {
   },
   mutations: {
     updateLanguageHash (state, val) {
-      for (let key in val.files) {
+      for (const key in val.files) {
         const obj = val.files[key];
         let langIDs = state.languageHash[obj.language];
 

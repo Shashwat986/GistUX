@@ -25,7 +25,6 @@ export default {
       state.gh = null;
       state.ghUser = null;
       state.ghUserData = null;
-      window.location.reload();
     },
     setUser (state, user) {
       state.ghUser = user;
@@ -60,13 +59,16 @@ export default {
       return Promise.all([userDataPromise, pagesPromise]).then((values) => {
         context.commit('showSpinner', 'Processing fetched pages');
         context.commit('setUserData', values[0].data);
-        return context.dispatch('setGistData', values[1].data);
+        return context.dispatch('setGistData', values[1].data).then(() => {
+          context.dispatch('setSuccess', 'Logged in Successfully');
+          context.commit('hideSpinner');
+        }, () => {
+          context.commit('destroySession');
+          context.commit('hideSpinner');
+        });
       }, () => {
         context.dispatch('setError', 'Invalid Authentication Key');
         context.commit('destroySession');
-        context.commit('hideSpinner');
-      }).then(() => {
-        context.dispatch('setSuccess', 'Logged in Successfully');
         context.commit('hideSpinner');
       });
     },

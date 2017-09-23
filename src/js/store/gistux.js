@@ -103,12 +103,16 @@ export default {
     fetchConfigAndUpdateFolderJSON (context) {
       const folderJSONConfigFile = context.getters.folderJSONConfigFile;
 
-      context.commit('setFolderJSONConfigFileID', folderJSONConfigFile.id);
       context.commit('showSpinner', 'Fetching current folder structure');
 
       return context.dispatch('fetchGistContent', folderJSONConfigFile.id).then((resp) => {
         const fileContent = resp.data.files[context.getters.gistUXFileName].content;
+        if (!window.folderJSON.validateFile(fileContent)) {
+          context.dispatch('setError', 'Invalid GistUX file found. Do you have another file with the same name?');
+          return Promise.reject();
+        }
         context.dispatch('updateFolderJSON', JSON.parse(fileContent));
+        context.commit('setFolderJSONConfigFileID', folderJSONConfigFile.id);
 
         // Add new files to root folder
         const extraFiles = difference(
