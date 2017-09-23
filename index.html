@@ -17,6 +17,7 @@
         position: absolute;
         left: 0;
         right: 0;
+        opacity: 0.8;
       }
     </style>
   </head>
@@ -31,10 +32,7 @@
     </div>
     <div class="container-fluid bg-dark m10-bottom">
       <div class="container">
-        <template v-if="state.github.githubKey">
-          <h3>Welcome Back!</h3>
-        </template>
-        <template v-else>
+        <template v-if="!state.github.githubKey">
           <h3>GistUX</h3>
           <p>
             GistUX is a free, open-source tool that reads your <a href="https://gist.github.com" target="_blank">Github Gists</a> and allows you to

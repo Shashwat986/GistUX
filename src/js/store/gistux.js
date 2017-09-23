@@ -76,6 +76,7 @@ export default {
   actions: {
     setGistData (context, data) {
       context.commit('setGistData', data);
+      context.dispatch('updateSearch');
 
       if (context.getters.gistUXFileName === null) {
         throw new NotLoggedInException();
@@ -165,6 +166,7 @@ export default {
     getGistDataAndUpdateMap (context, gistID) {
       return context.dispatch('fetchGistContent', gistID).then((data) => {
         context.commit('addElementToGistData', data.data);
+        context.dispatch('updateSearch');
       });
     }
   }
