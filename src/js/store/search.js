@@ -4,21 +4,25 @@ export default {
   state: {
     processedIds: [],
     searchHash: {},
-    languageHash: {}
+    languageHash: {},
+    privacyHash: {},
   },
   mutations: {
     updateLanguageHash (state, val) {
       for (const key in val.files) {
         const obj = val.files[key];
-        let langIDs = state.languageHash[obj.language];
-
-        if (langIDs === undefined) {
-          langIDs = [];
-        }
+        const langIDs = state.languageHash[obj.language] || [];
 
         langIDs.push(val.id);
         Vue.set(state.languageHash, obj.language, langIDs);
       }
+    },
+    updatePrivacyHash (state, val) {
+      const privacy = (val.public ? 'public' : 'private');
+      const privIDs = state.privacyHash[privacy] || [];
+
+      privIDs.push(val.id);
+      Vue.set(state.privacyHash, privacy, privIDs);
     },
     updateSearchHash (state, val) {
       // TODO
@@ -34,6 +38,7 @@ export default {
         }
 
         context.commit('updateLanguageHash', val);
+        context.commit('updatePrivacyHash', val);
       });
     }
   }

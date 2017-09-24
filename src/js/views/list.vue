@@ -42,6 +42,21 @@
           </li>
         </ul>
       </li>
+      <li tabindex="0" role="presentation" :class="['dropdown', 'no-outline', {open: showPrivacyDropdown}]" @focusout="showPrivacyDropdown = false">
+        <a class="dropdown-toggle pointer" @click="(showPrivacyDropdown = !showPrivacyDropdown)">Privacy</a>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="pointer" @click="selectPrivacy(null)">All</a>
+          </li>
+          <li role="separator" class="divider"></li>
+          <li>
+            <a :class="['pointer', {'font-bold': (selectedPrivacy === 'public')}]" @click="selectPrivacy('public')">Public</a>
+          </li>
+          <li>
+            <a :class="['pointer', {'font-bold': (selectedPrivacy === 'private')}]" @click="selectPrivacy('private')">Private</a>
+          </li>
+        </ul>
+      </li>
     </ul>
     </div>
   </div>
@@ -75,7 +90,9 @@ export default {
       route: [],
       currentPath: null,
       showLanguageDropdown: false,
-      selectedLanguage: null
+      selectedLanguage: null,
+      showPrivacyDropdown: false,
+      selectedPrivacy: null
     };
   },
   computed: {
@@ -94,6 +111,10 @@ export default {
       this.selectedLanguage = language;
       this.showLanguageDropdown = false;
     },
+    selectPrivacy (type) {
+      this.selectedPrivacy = type;
+      this.showPrivacyDropdown = false;
+    },
     updateDisplayData () {
       const folderPath = this.$route.params.path;
       this.currentPath = this.folderJSON.getNodeFromPath(folderPath);
@@ -102,14 +123,22 @@ export default {
       }
     },
     listFiles () {
-      if (this.selectedLanguage == null) {
-        return this.folderJSON.getFiles(this.currentPath);
+      let files = this.folderJSON.getFiles(this.currentPath);
+      if (this.selectedLanguage != null) {
+        const languageIDs = this.state.search.languageHash[this.selectedLanguage] || [];
+        files = files.filter((elem) => {
+          return languageIDs.includes(elem.model.uuid);
+        });
       }
 
-      const languageIDs = this.state.search.languageHash[this.selectedLanguage] || [];
-      return this.folderJSON.getFiles(this.currentPath).filter((elem) => {
-        return languageIDs.includes(elem.model.uuid);
-      });
+      if (this.selectedPrivacy != null) {
+        const typeIDs = this.state.search.privacyHash[this.selectedPrivacy] || [];
+        files = files.filter((elem) => {
+          return typeIDs.includes(elem.model.uuid);
+        });
+      }
+
+      return files;
     }
   },
   watch: {
