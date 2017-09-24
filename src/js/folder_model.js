@@ -213,7 +213,7 @@ class FolderModel {
 
   validateFile (fileContent) {
     try {
-      JSON.parse(fileContent);
+      return this.validate(JSON.parse(fileContent));
     } catch (e) {
       return false;
     }
