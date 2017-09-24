@@ -2,12 +2,24 @@
   background-color: #eee;
 }
 
+.m10 {
+  margin: 10px;
+}
+
 .m10-top {
   margin-top: 10px;
 }
 
 .m10-bottom {
   margin-bottom: 10px;
+}
+
+.m15-left {
+  margin-left: 15px;
+}
+
+.m15-right {
+  margin-right: 15px;
 }
 
 .pointer {
@@ -20,4 +32,15 @@
 
 .no-outline {
   outline: none !important;
+}
+
+body {
+  padding-bottom: 20px;
+}
+
+.bg-danger, .bg-success {
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0.8;
 }

@@ -6,20 +6,6 @@
     <title>GistUX</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <style>
-      body {
-        padding-top: 50px;
-        padding-bottom: 20px;
-      }
-
-      .bg-danger, .bg-success {
-        position: absolute;
-        left: 0;
-        right: 0;
-        opacity: 0.8;
-      }
-    </style>
   </head>
   <body>
     <section id="main">
@@ -30,41 +16,39 @@
     <div class="container-fluid bg-success" v-if="state.banner.success">
       <p class="text-center m10-top">{{state.banner.success}}</p>
     </div>
-    <div class="container-fluid bg-dark m10-bottom">
-      <div class="container">
-        <template v-if="!state.github.githubKey">
-          <h3>GistUX</h3>
-          <p>
-            GistUX is a free, open-source tool that reads your <a href="https://gist.github.com" target="_blank">Github Gists</a> and allows you to
-            organize them in a directory structure.
-          </p>
-          <p>
-            All you need to get started is to generate a <a target="_blank" href="https://github.com/settings/tokens">Github Authentication token</a>
-            and give it the <code>gist</code> scope (which will allow this tool to read your secret gists, and create gists).
-            You don't <em>have</em> to provide it with the <code>gist</code> scope, but then you'll be restricted to playing with your public gists.
-          </p>
-          <p>
-            <b>NOTE:</b>
-            <ul>
-              <li><b>This is a purely client-side application. I do not save your gists, or any metadata anywhere. I do not make any third-party API requests.</b></li>
-              <li>If you provide this tool access to create gists, it will create a gist called <code>GistUX_&lt;your_username&gt;.json</code> and store everything there.
-              <b>The data will NOT be stored anywhere else.</b></li>
-              <li>If you do not provide GistUX access, you can view the JSON object and save it locally wherever you want.
-              The structure is easy enough to understand, and you can modify it freely.</li>
-            </ul>
-          </p>
-          <p>
-            I've found that, whenever I work on something, I end up creating a very large number of secret gists, and it's hard to categorize them properly.
-            This is my solution to that problem. Having said that, this solution is something I'm releasing into the wild.
-            There is no warranty of any kind, and I am not liable for any data, errors, security issues, or other problems that may come up with this tool.
-            If you're nervous about that, feel free to go through the <a href="https://github.com/Shashwat986/GistUX" target="_blank">code</a>, and help me improve
-            GistUX if you see anything lacking.
-          </p>
-        </template>
-      </div>
+    <div class="container-fluid bg-dark m10">
+      <template v-if="!state.github.githubKey">
+        <h3>GistUX</h3>
+        <p>
+          GistUX is a free, open-source tool that reads your <a href="https://gist.github.com" target="_blank">Github Gists</a> and allows you to
+          organize them in a directory structure.
+        </p>
+        <p>
+          All you need to get started is to generate a <a target="_blank" href="https://github.com/settings/tokens">Github Authentication token</a>
+          and give it the <code>gist</code> scope (which will allow this tool to read your secret gists, and create gists).
+          You don't <em>have</em> to provide it with the <code>gist</code> scope, but then you'll be restricted to playing with your public gists.
+        </p>
+        <p>
+          <b>NOTE:</b>
+          <ul>
+            <li><b>This is a purely client-side application. I do not save your gists, or any metadata anywhere. I do not make any third-party API requests.</b></li>
+            <li>If you provide this tool access to create gists, it will create a gist called <code>GistUX_&lt;your_username&gt;.json</code> and store everything there.
+            <b>The data will NOT be stored anywhere else.</b></li>
+            <li>If you do not provide GistUX access, you can view the JSON object and save it locally wherever you want.
+            The structure is easy enough to understand, and you can modify it freely.</li>
+          </ul>
+        </p>
+        <p>
+          I've found that, whenever I work on something, I end up creating a very large number of secret gists, and it's hard to categorize them properly.
+          This is my solution to that problem. Having said that, this solution is something I'm releasing into the wild.
+          There is no warranty of any kind, and I am not liable for any data, errors, security issues, or other problems that may come up with this tool.
+          If you're nervous about that, feel free to go through the <a href="https://github.com/Shashwat986/GistUX" target="_blank">code</a>, and help me improve
+          GistUX if you see anything lacking.
+        </p>
+      </template>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
       <!-- Example row of columns -->
       <div class="row">
         <spinner v-show="state.spinner.showSpinner" v-bind:message="state.spinner.spinnerMessage"></spinner>
@@ -74,7 +58,7 @@
     </section>
     <section id="footer">
       <hr>
-      <div class="container">
+      <div class="container-fluid">
         <div class="row">
           <div class="col-sm-12">
             <footer>

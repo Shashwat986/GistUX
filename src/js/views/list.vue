@@ -28,8 +28,8 @@
   </div>
   <h2><small>Files</small></h2>
   <div class="row">
-    <div class="col-md-12 filters-nav">
-    <ul class="nav nav-pills pull-right col-md-12">
+    <div class="col-xs-12 filters-nav">
+    <ul class="nav nav-pills pull-right col-xs-12">
       <li tabindex="0" role="presentation" :class="['dropdown', 'no-outline', {open: showLanguageDropdown}]" @focusout="showLanguageDropdown = false">
         <a class="dropdown-toggle pointer" @click="(showLanguageDropdown = !showLanguageDropdown)">Language</a>
         <ul class="dropdown-menu">
