@@ -20,7 +20,6 @@
   <h2><small>Folders</small></h2>
   <div class="row">
     <template v-for="(node, index) in folderJSON.getFolders(currentPath)">
-      <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
       <folder-item :key="index" :folder="node" :current-path="currentPath"></folder-item>
     </template>
@@ -62,7 +61,6 @@
   </div>
   <div class="row">
     <template v-for="(item, index) in listFiles()">
-      <div class="col-xs-12 visible-xs-block visible-sm-block clearfix" v-if="index % 2 == 0"></div>
       <div class="col-md-12 visible-md-block visible-lg-block clearfix" v-if="index % 3 == 0"></div>
       <file-item :key="item.model.uuid" :node="item"></file-item>
     </template>

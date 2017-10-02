@@ -1,12 +1,14 @@
 <template>
   <div class="list-group move-list-group">
-    <a class="list-group-item active">
+    <a class="list-group-item list-group-item-info">
       {{folderPath}}
       <span class="badge" @click="moveItem">Move Here</span>
     </a>
-    <a v-for="folder in folders" @click="updatePath(folder)" class="list-group-item">
-      {{folder}}
-    </a>
+    <div class="move-max-height-overflow">
+      <a v-for="folder in folders" @click="updatePath(folder)" class="list-group-item">
+        {{folder}}
+      </a>
+    </div>
     <div class="list-group-item">
       <a @click="removePath">Back</a>
       <a class="pull-right" @click="createFolder">New Folder</a>
@@ -62,5 +64,10 @@ export default {
 <style>
 .move-list-group {
   margin-bottom: 0;
+}
+
+.move-max-height-overflow {
+  overflow-y: auto;
+  max-height: 11.7em;
 }
 </style>

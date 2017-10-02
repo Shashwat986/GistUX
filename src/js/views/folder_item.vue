@@ -1,23 +1,23 @@
 <template>
   <div
-    class="col-xs-6 col-md-4 panel-container folder-panel"
+    class="col-xs-12 col-md-4 panel-container folder-panel"
     draggable="true"
     @dragstart="dragStart"
     @dragend="dragEnd"
     @dragover.prevent
     @drop="drop">
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-heading" @click="navigateFolder">
         <template v-if="typeof folder === 'object'">
           <h3 :class="['panel-title', 'form-group', {'has-error': editBoxHasError}]" v-if="showEditBox">
             <input :value="folder.model.name" @keyup.enter="updateName" @focusout="updateName" class="form-control" v-focus />
           </h3>
-          <router-link :to="getFolderUrl(folder.model.name)" class="pointer" v-else>
+          <a class="pointer" v-else>
             <h3 class="panel-title">
               {{folder.model.name}}
             </h3>
-          </router-link>
-          <span class="pull-right pointer" @click="openEditBox" v-show="!showEditBox">Edit</span>
+          </a>
+          <span class="pull-right pointer badge" @click.stop="openEditBox" v-show="!showEditBox">Edit</span>
         </template>
         <template v-else>
           <a @click="addFolder" class="pointer">
@@ -54,6 +54,9 @@ export default {
     }
   },
   methods: {
+    navigateFolder () {
+      this.$router.push(this.getFolderUrl(this.folder.model.name));
+    },
     getFolderUrl (key) {
       return `${(this.$route.path || '/list')}/${key}`;
     },

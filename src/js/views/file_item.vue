@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-xs-6 col-md-4 panel-container file-panel"
+    class="col-xs-12 col-md-4 panel-container file-panel"
     :draggable="!loading"
     @dragstart="dragStart"
     @dragend="dragEnd">
@@ -15,18 +15,18 @@
           <span class="pull-right">&nbsp;</span>
         </h3>
       </div>
+      <div class="panel-body" v-if="fileObject.description.length > 0">
+        {{ fileObject.description }}
+      </div>
       <table class="table" v-if="showFiles">
         <tbody>
           <tr v-for="(v,k) in fileObject.files">
             <td>
-              <a :href="v.raw_url" target="_blank">{{k}}</a>
+              <a :href="fileObject.html_url + '#file-' + slugify(k)" target="_blank">{{k}}</a>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="panel-body" v-if="fileObject.description.length > 0">
-        {{ fileObject.description }}
-      </div>
       <div class="panel-footer clearfix">
         <i :class="[fileObject.public ? 'icon-eye' : 'icon-eye-off']"></i>
         <a @click="toggleFiles" v-if="canShowFiles">
@@ -91,6 +91,9 @@ export default {
     }
   },
   methods: {
+    slugify (str) {
+      return str.replace(/\W+/g, '-');
+    },
     toggleFiles () {
       this.showFiles = !this.showFiles;
     },
