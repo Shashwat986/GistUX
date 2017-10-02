@@ -20,7 +20,7 @@
           <span class="pull-right pointer badge" @click.stop="openEditBox" v-show="!showEditBox">Edit</span>
         </template>
         <template v-else>
-          <a @click="addFolder" class="pointer">
+          <a class="pointer">
             <h3 class="panel-title">Create New Folder</h3>
           </a>
         </template>
@@ -55,7 +55,11 @@ export default {
   },
   methods: {
     navigateFolder () {
-      this.$router.push(this.getFolderUrl(this.folder.model.name));
+      if (typeof this.folder === 'object') {
+        this.$router.push(this.getFolderUrl(this.folder.model.name));
+      } else {
+        this.addFolder();
+      }
     },
     getFolderUrl (key) {
       return `${(this.$route.path || '/list')}/${key}`;
