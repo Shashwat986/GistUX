@@ -192,8 +192,12 @@ class FolderModel {
   }
 
   move (node, toNode) {
+    if (this.objectEqual(node, toNode)) {
+      return null;
+    }
     node.drop();
     toNode.addChild(node);
+    return true;
   }
 
   dropNode (node) {
@@ -201,7 +205,7 @@ class FolderModel {
       return null;
     }
 
-    let par = node.parent;
+    const par = node.parent;
     node.drop().children.forEach((elem) => {
       par.addChild(elem);
     });
