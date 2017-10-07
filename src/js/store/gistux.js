@@ -129,8 +129,10 @@ export default {
             'addFilesToFolderJSON',
             extraFiles
           );
-          context.dispatch('updateGistUXConfig');
+          return context.dispatch('updateGistUXConfig');
         }
+
+        return Promise.resolve();
       });
     },
     updateFolderJSON (context, jsonData = undefined) {
