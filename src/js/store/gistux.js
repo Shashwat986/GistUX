@@ -69,6 +69,10 @@ export default {
       window.folderJSON.move(fileNode, folder);
       state.folderJSONChanged = true;
     },
+    folderJSONdeleteFolder (state, node) {
+      window.folderJSON.dropNode(node);
+      state.folderJSONChanged = true;
+    },
     setFolderJSONConfigFileID (state, id = null) {
       window.folderJSON.objectID = id;
     }

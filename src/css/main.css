@@ -44,3 +44,7 @@ body {
   right: 0;
   opacity: 0.8;
 }
+
+.font-large {
+  font-size: 1.25em;
+}

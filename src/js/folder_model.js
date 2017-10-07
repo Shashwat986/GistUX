@@ -196,6 +196,19 @@ class FolderModel {
     toNode.addChild(node);
   }
 
+  dropNode (node) {
+    if (this.objectEqual(node, this.root)) {
+      return null;
+    }
+
+    let par = node.parent;
+    node.drop().children.forEach((elem) => {
+      par.addChild(elem);
+    });
+
+    return par;
+  }
+
   asJSON () {
     return JSON.stringify(this.root.model, null, 2);
   }

@@ -17,7 +17,8 @@
               {{folder.model.name}}
             </h3>
           </a>
-          <span class="pull-right pointer badge" @click.stop="openEditBox" v-show="!showEditBox">Edit</span>
+          <span class="pull-right pointer icon-cancel-circled2 font-large" @click.stop="deleteFolder"></span>
+          <span class="pull-right pointer icon-edit font-large" @click.stop="openEditBox" v-show="!showEditBox"></span>
         </template>
         <template v-else>
           <a class="pointer">
@@ -122,6 +123,9 @@ export default {
       })
 
       this.$store.dispatch('updateGistUXConfig');
+    },
+    deleteFolder () {
+      this.$store.commit('folderJSONdeleteFolder', this.folder);
     }
   },
   created () {
