@@ -1,6 +1,8 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
+
+const PROD = (process.env.NODE_ENV === 'production');
 
 module.exports = {
   entry: './src/app.js',
@@ -20,7 +22,9 @@ module.exports = {
         to: 'index.html'
       }
     ])
-  ],
+  ].concat(
+    PROD ? [ new UglifyJSPlugin() ] : []
+  ),
   module: {
     rules: [
       {
