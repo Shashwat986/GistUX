@@ -36,7 +36,7 @@
             <a class="pointer" @click="selectLanguage(null)">All</a>
           </li>
           <li role="separator" class="divider"></li>
-          <li v-for="language in Object.keys(state.search.languageHash)">
+          <li v-for="language in filteredLanguageHash">
             <a :class="['pointer', {'font-bold': (selectedLanguage === language)}]" @click="selectLanguage(language)">{{language}}</a>
           </li>
         </ul>
@@ -90,7 +90,8 @@ export default {
       showLanguageDropdown: false,
       selectedLanguage: null,
       showPrivacyDropdown: false,
-      selectedPrivacy: null
+      selectedPrivacy: null,
+      filteredLanguageHash: []
     };
   },
   computed: {
@@ -119,6 +120,8 @@ export default {
       if (this.currentPath != null) {
         this.route = this.folderJSON.getPathBreadcrumb(this.currentPath);
       }
+
+      this.filteredLanguageHash = this.$store.getters.filteredLanguageHash(this.currentPath);
     },
     listFiles () {
       let files = this.folderJSON.getFiles(this.currentPath);

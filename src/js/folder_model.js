@@ -37,6 +37,12 @@ class FolderModel {
     }).map((node) => node.model.uuid);
   }
 
+  getFileFromId (uuid) {
+    return this.root.first((node) => {
+      return (this.isFile(node) && this.node.model.uuid === uuid);
+    });
+  }
+
   getNodeFromPath (folderPath) {
     let node = this.root;
     let path = folderPath;

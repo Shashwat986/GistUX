@@ -7,6 +7,21 @@ export default {
     languageHash: {},
     privacyHash: {},
   },
+  getters: {
+    filteredLanguageHash (state, getters, rootState) {
+      return (node) => {
+        const languages = new Set();
+        window.folderJSON.getFiles(node).forEach((elem) => {
+          const val = getters.idObjectMapping.get(elem.model.uuid);
+          for (const key in val.files) {
+            languages.add(val.files[key].language);
+          }
+        });
+
+        return Array.from(languages);
+      }
+    }
+  },
   mutations: {
     updateLanguageHash (state, val) {
       for (const key in val.files) {
