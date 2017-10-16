@@ -6,23 +6,26 @@ import Config from './views/config.vue';
 
 Vue.use(VueRouter);
 
+const checkLogin = (to, from, next) => {
+  const state = store.state;
+  if (!state.github.githubKey ||
+      window.folderJSON.isEmpty()) {
+    next(false);
+  } else {
+    next();
+  }
+}
+
 const routes = [
   {
     path: '/list/:path*',
     component: List,
-    beforeEnter (to, from, next) {
-      const state = store.state;
-      if (!state.github.githubKey ||
-          window.folderJSON.isEmpty()) {
-        next(false);
-      } else {
-        next();
-      }
-    }
+    beforeEnter: checkLogin
   },
   {
     path: '/config',
-    component: Config
+    component: Config,
+    beforeEnter: checkLogin
   }
 ];
 
