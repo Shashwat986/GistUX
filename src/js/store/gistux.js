@@ -95,9 +95,8 @@ export default {
         }
 
         // If we didn't find a config file
-        return context.dispatch('updateFolderJSON').then(() => {
-          context.dispatch('updateGistUXConfig');
-        });
+        context.dispatch('updateFolderJSON');
+        return context.dispatch('updateGistUXConfig');
       }
 
       // If we have an existing folderJSON object when this is called
@@ -113,8 +112,13 @@ export default {
         const fileContent = resp.data.files[context.getters.gistUXFileName].content;
         if (!window.folderJSON.validateFile(fileContent)) {
           context.dispatch('setError', 'Invalid GistUX file found. Do you have another file with the same name?');
-          return Promise.reject();
+
+          // If we can't read the config file, assume there isn't one, but don't write to it
+          context.commit('setGistPermission', false);
+          context.dispatch('updateFolderJSON');
+          return context.dispatch('updateGistUXConfig');
         }
+
         context.dispatch('updateFolderJSON', JSON.parse(fileContent));
         context.commit('setFolderJSONConfigFileID', folderJSONConfigFile.id);
 
@@ -151,7 +155,11 @@ export default {
         );
       }
     },
-    updateGistUXConfig (context) {
+    updateGistUXConfig (context, force = false) {
+      // If we know that we can't write to the gist
+      if (!context.rootState.github.ghGistPermission && !force)
+        return Promise.resolve(null);
+
       return context.dispatch(
         'writeGistContent',
         {

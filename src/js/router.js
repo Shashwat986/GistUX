@@ -18,6 +18,18 @@ const checkLogin = (to, from, next) => {
 
 const routes = [
   {
+    path: '',
+    beforeEnter (to, from, next) {
+      const state = store.state;
+      if (state.github.githubKey &&
+          !window.folderJSON.isEmpty()) {
+        next('/list');
+      } else {
+        next();
+      }
+    }
+  },
+  {
     path: '/list/:path*',
     component: List,
     beforeEnter: checkLogin

@@ -5,6 +5,9 @@
     <br/>
     Fix this by <a href="https://github.com/settings/tokens" target="_blank">regenerating your Github Token</a> and giving it the <i>gist</i> permission.
     <br />
+    Alternatively, if you have already given the <i>gist</i> permission, this may be caused by an existing file named <code>{{$store.getters.gistUXFileName}}</code> that doesn't have valid config information.
+    <br />
+    <br />
     If you wish to go ahead with this, you may import/export your temporary config file from <router-link to="/config">here</router-link>
   </p>
   <ol class="breadcrumb">

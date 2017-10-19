@@ -7,7 +7,7 @@ export default {
     gh: null,
     ghUser: null,
     ghUserData: null,
-    ghGistPermission: null
+    ghGistPermission: true
   },
   mutations: {
     setGithubKey (state, key) {
