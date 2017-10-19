@@ -9,13 +9,11 @@
   </head>
   <body>
     <section id="main">
+    <center v-show="false">
+      If you see this, that means the page hasn't loaded yet. If this message persists, please check your Javascript settings, and your internet connection.
+    </center>
     <navbar :set-github-key="setGithubKey"></navbar>
-    <div class="container-fluid bg-danger" v-if="state.banner.error">
-      <p class="text-center m10-top">{{state.banner.error}}</p>
-    </div>
-    <div class="container-fluid bg-success" v-if="state.banner.success">
-      <p class="text-center m10-top">{{state.banner.success}}</p>
-    </div>
+    <banners></banners>
     <div class="container-fluid bg-dark m10">
       <template v-if="!state.github.githubKey">
         <h3>GistUX</h3>

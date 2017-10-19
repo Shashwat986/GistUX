@@ -2,6 +2,7 @@ import Vue from 'vue';
 import router from './router';
 import Spinner from './views/spinner.vue';
 import Navbar from './views/navbar.vue';
+import Banners from './views/banners.vue';
 import store from './store';
 import constants from './constants';
 import FolderModel from './folder_model';
@@ -21,7 +22,8 @@ window.vm = new Vue({
   },
   components: {
     spinner: Spinner,
-    navbar: Navbar
+    navbar: Navbar,
+    banners: Banners,
   },
   methods: {
     setGithubKey (githubKey) {
