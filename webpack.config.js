@@ -21,6 +21,10 @@ module.exports = {
       {
         from: './index.html',
         to: 'index.html'
+      },
+      {
+        from: './favicon.ico',
+        to: 'favicon.ico'
       }
     ])
   ].concat(

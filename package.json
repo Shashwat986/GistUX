@@ -5,7 +5,8 @@
   "author": "Shashwat Chandra",
   "scripts": {
     "dev": "webpack --progress --watch",
-    "start": "cd dist && python -m http.server"
+    "start": "cd dist && python -m http.server",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "babel-core": "^6.26.0",

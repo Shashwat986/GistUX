@@ -19,7 +19,7 @@ export default {
         });
 
         return Array.from(languages);
-      }
+      };
     }
   },
   mutations: {

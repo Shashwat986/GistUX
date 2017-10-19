@@ -157,8 +157,9 @@ export default {
     },
     updateGistUXConfig (context, force = false) {
       // If we know that we can't write to the gist
-      if (!context.rootState.github.ghGistPermission && !force)
+      if (!context.rootState.github.ghGistPermission && !force) {
         return Promise.resolve(null);
+      }
 
       return context.dispatch(
         'writeGistContent',
