@@ -3,3 +3,5 @@ require('./css/main.css');
 require('./css/fontello.css');
 
 require('./js/main.js');
+
+require('./js/DragDropTouch.js');
